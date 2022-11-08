@@ -7,27 +7,17 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li>
-                <a href="{{url('inquiry')}}">
-                    <i class="nc-icon nc-app"></i>
-                    <p>Inquiry</p>
-                </a>
-            </li>
+
             <li class="active">
                 <a href="{{url('quotation')}}">
                     <i class="nc-icon nc-check-2"></i>
                     <p>Quotation</p>
-                </a>
-            </li>
-            <li>
-                <a href="{{url('purchase-order')}}">
-                    <i class="nc-icon nc-cart-simple"></i>
-                    <p>Purchase Order</p>
                 </a>
             </li>
             <li>
@@ -138,31 +128,42 @@
                         <h5 class="card-title">Create Quotation With Reference Inquiry (Overview)</h5>
                     </div>
                     <div class="card-body">
-                        <form>
+                        @if($errors->any())
+                        @foreach($errors->all() as $err)
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                              <i class="nc-icon nc-simple-remove"></i>
+                            </button>
+                            <span>{{ $err }}</span>
+                          </div>
+                        @endforeach
+                        @endif
+                        <form action="{{ route('quotation.action') }}" method="POST">
+                            {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Inquiry</label>
-                                        <select class="form-control" aria-label="Default select example">
-                                            <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                        <select class="form-control" aria-label="Default select example" name="inquiry_id" id="admin-inquiry">   
+                                            <option selected></option>              
+                                            @foreach ($inquiry as $key)
+                                            <option value="{{$key->id}}">I - 0{{$key->id}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            <h5>Costumer Data</h5>
+                            <h5>Customer Data</h5>
                             <hr>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Costumer</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <label>Customer</label>
+                                        <select class="form-control" aria-label="Default select example" name="customer_id" required>
                                             <option selected></option>
-                                            <option value="1">17772033 - Roy Parsaoran</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @foreach ($users as $key)
+                                            <option value="{{$key->id}}">{{$key->id}} - {{$key->name}}</option>    
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -173,19 +174,19 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Valid From</label>
-                                        <input type="date" class="form-control">
+                                        <input type="date" class="form-control" name="valid_from">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Valod To</label>
-                                        <input type="date" class="form-control">
+                                        <label>Valid To</label>
+                                        <input type="date" class="form-control" name="valid_to">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Net Value</label>
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control" name="net_value">
                                     </div>
                                 </div>
                             </div>
@@ -193,12 +194,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Material Name</label>
-                                        <select class="form-control" aria-label="Default select example">
-                                            <option selected></option>
-                                            <option value="1">17772033 - Roy Parsaoran</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
+                                        <input type="text" class="form-control" disabled id="quotation-material-name">
                                     </div>
                                 </div>
                             </div>
@@ -206,21 +202,21 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Order Quantity</label>
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control" disabled id="quotation-order-quantity">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Desciption</label>
-                                        <input type="text" class="form-control">
+                                        <label>Description</label>
+                                        <input type="text" class="form-control" disabled id="quotation-material-description">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="update ml-auto mr-auto">
-                                    <button type="submit" class="btn btn-primary btn-round">Create</button>
+                                    <button type="submit" class="btn btn-primary btn-round">Create Quotation</button>
                                 </div>
                             </div>
                         </form>
@@ -241,7 +237,7 @@
                                         Quotation Number
                                     </th>
                                     <th>
-                                        Costumer
+                                        Customer
                                     </th>
                                     <th>
                                         Material Name
@@ -260,75 +256,32 @@
                                     </th>
                                 </thead>
                                 <tbody>
+                                    @foreach ($data as $key)
                                     <tr>
                                         <td>
-                                            123451231
+                                            Q-0{{$key->id}}
                                         </td>
                                         <td>
-                                            123 - Customer
+                                            C-0{{$key->customer_id}} - {{$key->user_name}}
                                         </td>
                                         <td>
-                                            T-123 Beras
+                                            M-0{{$key->material_id}} - {{$key->material_name}}
                                         </td>
                                         <td>
-                                            1000
+                                            {{$key->order_quantity}}
+                                        </td>
                                         </td>
                                         <td>
-                                            01/11/12
+                                            {{$key->valid_from}}
                                         </td>
                                         <td>
-                                            20/11/12
+                                            {{$key->valid_to}}
                                         </td>
                                         <td>
-                                            3000000
+                                            {{$key->net_value}}
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            123451231
-                                        </td>
-                                        <td>
-                                            123 - Customer
-                                        </td>
-                                        <td>
-                                            T-123 Beras
-                                        </td>
-                                        <td>
-                                            1000
-                                        </td>
-                                        <td>
-                                            01/11/12
-                                        </td>
-                                        <td>
-                                            20/11/12
-                                        </td>
-                                        <td>
-                                            3000000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            123451231
-                                        </td>
-                                        <td>
-                                            123 - Customer
-                                        </td>
-                                        <td>
-                                            T-123 Beras
-                                        </td>
-                                        <td>
-                                            1000
-                                        </td>
-                                        <td>
-                                            01/11/12
-                                        </td>
-                                        <td>
-                                            20/11/12
-                                        </td>
-                                        <td>
-                                            3000000
-                                        </td>
-                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

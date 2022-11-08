@@ -6,8 +6,9 @@
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>1973021 - Eunike Tirza Kerenhapukh</title>
+    <title>Sistem Informasi Logistik Digital</title>
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Rubik:400,700'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="./style.css">
     <style>
         * {
@@ -103,7 +104,7 @@
             flex-direction: row;
         }
 
-        .login-form .action a {
+        .login-form .action button {
             text-align:center;
             width: 100%;
             border: none;
@@ -142,29 +143,38 @@
 <body>
     <!-- partial:index.partial.html -->
     <div class="login-form">
-        <form>
+        @if($errors->any())
+        @foreach($errors->all() as $err)
+        <div class="alert alert-warning" role="alert">
+            {{ $err }}
+          </div>
+        @endforeach
+        @endif
+        <form action="{{ route('register.action') }}" method="POST">
+            {{ csrf_field() }}
             <h1>Register</h1>
             <div class="content">
                 <div class="input-field">
-                    <input type="text" placeholder="Name" autocomplete="nope">
+                    <input type="text" placeholder="Name" autocomplete="nope" name="name" required>
                 </div>
                 <div class="input-field">
-                    <input type="number" placeholder="Phone Number" autocomplete="nope">
+                    <input type="number" placeholder="Phone Number" autocomplete="nope" name="phone_number" required>
                 </div>
                 <div class="input-field">
-                    <input type="text" placeholder="Address" autocomplete="nope">
+                    <input type="text" placeholder="Address" autocomplete="nope" name="address" required>
                 </div>
                 <div class="input-field">
-                    <input type="email" placeholder="Email" autocomplete="nope">
+                    <input type="email" placeholder="Email" autocomplete="nope" name="email" required>
                 </div>
                 <div class="input-field">
-                    <input type="password" placeholder="Password" autocomplete="new-password">
+                    <input type="password" placeholder="Password" autocomplete="new-password" name="password" required>
                 </div>
             </div>
             <div class="action">
-                <a href="{{url('/')}}">
+                <button class="btn btn-primary">Register</button>
+                {{-- <a href="{{url('/')}}">
                     Register
-                </a>
+                </a> --}}
             </div>
             </div>
         </form>

@@ -7,27 +7,17 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+            Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li>
-                <a href="{{url('inquiry')}}">
-                    <i class="nc-icon nc-app"></i>
-                    <p>Inquiry</p>
-                </a>
-            </li>
+
             <li>
                 <a href="{{url('quotation')}}">
                     <i class="nc-icon nc-check-2"></i>
                     <p>Quotation</p>
-                </a>
-            </li>
-            <li>
-                <a href="{{url('purchase-order')}}">
-                    <i class="nc-icon nc-cart-simple"></i>
-                    <p>Purchase Order</p>
                 </a>
             </li>
             <li>
@@ -139,17 +129,24 @@
                         <h5 class="card-title">Create Outbound Delivery (Overview)</h5>
                     </div>
                     <div class="card-body">
-                        <form>
+                        @if($errors->any())
+                        @foreach($errors->all() as $err)
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert"
+                                aria-label="Close">
+                                <i class="nc-icon nc-simple-remove"></i>
+                            </button>
+                            <span>{{ $err }}</span>
+                        </div>
+                        @endforeach
+                        @endif
+                        <form action="{{ route('outbound_delivery.action') }}" method="POST">
+                            {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Shipping Point</label>
-                                        <select class="form-control" aria-label="Default select example">
-                                            <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
+                                        <input type="text" class="form-control" name="shipping_point">
                                     </div>
                                 </div>
                             </div>
@@ -160,11 +157,12 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Sales Order</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example"
+                                            name="sales_order_id" id="admin-sales-order">
                                             <option selected></option>
-                                            <option value="1">17772033 - Roy Parsaoran</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @foreach ($so as $key)
+                                            <option value="{{$key->id}}">SO-0{{$key->id}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -173,7 +171,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Selection Date</label>
-                                        <input type="date" class="form-control">
+                                        <input type="date" class="form-control" name="selection_date">
                                     </div>
                                 </div>
                             </div>
@@ -181,20 +179,17 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Customer</label>
-                                        <select class="form-control" aria-label="Default select example">
-                                            <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
+                                        <input type="text" class="form-control" disabled
+                                            id="outbound-delivery-customer">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Requst Delivery Date</label>
-                                        <input type="date" class="form-control">
+                                        <label>Request Delivery Date</label>
+                                        <input type="date" class="form-control" disabled
+                                            id="outbound-delivery-req-delivery-date">
                                     </div>
                                 </div>
                             </div>
@@ -205,12 +200,8 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Material Name</label>
-                                        <select class="form-control" aria-label="Default select example">
-                                            <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
+                                        <input type="text" class="form-control" disabled
+                                            id="outbound-delivery-material">
                                     </div>
                                 </div>
                             </div>
@@ -218,15 +209,17 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Order Quantity</label>
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control" disabled
+                                            id="outbound-delivery-quantity">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Desciption</label>
-                                        <input type="text" class="form-control">
+                                        <label>Description</label>
+                                        <input type="text" class="form-control" disabled
+                                            id="outbound-delivery-description">
                                     </div>
                                 </div>
                             </div>
@@ -234,14 +227,15 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Warehouse Number</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" disabled id="outbound-warehouse-number">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="update ml-auto mr-auto">
-                                    <button type="submit" class="btn btn-primary btn-round">Create</button>
+                                    <button type="submit" class="btn btn-primary btn-round">Create Outbound
+                                        Delivery</button>
                                 </div>
                             </div>
                         </form>
@@ -261,6 +255,9 @@
                                         Outbound Delivery Number
                                     </th>
                                     <th>
+                                        Shipping Point
+                                    </th>
+                                    <th>
                                         Customer
                                     </th>
                                     <th>
@@ -275,88 +272,51 @@
                                     <th>
                                         Warehouse Number
                                     </th>
+                                    <th>
+                                        Goods Issue
+                                    </th>
                                 </thead>
                                 <tbody>
+                                    @foreach ($data as $key)
                                     <tr>
                                         <td>
-                                            1312414
+                                            OD-0{{$key->id}}
                                         </td>
                                         <td>
-                                           12312 - Eunike
+                                            {{$key->shipping_point}}
                                         </td>
                                         <td>
-                                            10/10/2022
+                                            C-0{{$key->customer_id}} - {{$key->user_name}}
                                         </td>
                                         <td>
-                                            T12 - Kacang
+                                            {{$key->req_delivery_date}}
                                         </td>
                                         <td>
-                                            10
+                                            M-0{{$key->material_id}} - {{$key->material_name}}
                                         </td>
                                         <td>
-                                            29
+                                            {{$key->quantity}}
+                                        </td>
+                                        <td>
+                                            {{$key->warehouse_number}}
+                                        </td>
+                                        <td style="text-align: center">
+                                            @if ($key->goods_issue_status == 0)
+                                            <div class="update ml-auto mr-auto">
+                                                <form action="{{ url('outbound-delivery', [$key->id]) }}" method="POST">
+                                                    {{ csrf_field() }}
+                                                    <button type="submit"
+                                                        class="btn btn-primary btn-round">Post</button>
+                                                </form>
+                                            </div>
+                                            @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="green" class="bi bi-check" viewBox="0 0 16 16">
+                                                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                                              </svg>
+                                            @endif
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            1312414
-                                        </td>
-                                        <td>
-                                           12312 - Eunike
-                                        </td>
-                                        <td>
-                                            10/10/2022
-                                        </td>
-                                        <td>
-                                            T12 - Kacang
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                        <td>
-                                            29
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            1312414
-                                        </td>
-                                        <td>
-                                           12312 - Eunike
-                                        </td>
-                                        <td>
-                                            10/10/2022
-                                        </td>
-                                        <td>
-                                            T12 - Kacang
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                        <td>
-                                            29
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            1312414
-                                        </td>
-                                        <td>
-                                           12312 - Eunike
-                                        </td>
-                                        <td>
-                                            10/10/2022
-                                        </td>
-                                        <td>
-                                            T12 - Kacang
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                        <td>
-                                            29
-                                        </td>
-                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

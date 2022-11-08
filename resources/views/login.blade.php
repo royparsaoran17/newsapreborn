@@ -7,10 +7,11 @@
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        1973021 - Eunike Tirza Kerenhapukh
+        Sistem Informasi Logistik Digital
     </title>
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Rubik:400,700'>
     <link rel="stylesheet" href="./style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
         * {
             margin: 0;
@@ -105,7 +106,7 @@
             flex-direction: row;
         }
 
-        .login-form .action a {
+        .login-form .action button {
             text-align: center;
             width: 100%;
             border: none;
@@ -144,14 +145,22 @@
 <body>
     <!-- partial:index.partial.html -->
     <div class="login-form">
-        <form>
+        @if($errors->any())
+        @foreach($errors->all() as $err)
+        <div class="alert alert-warning" role="alert">
+            {{ $err }}
+          </div>
+        @endforeach
+        @endif
+        <form action="{{ route('login.action') }}" method="POST">
+            {{ csrf_field() }}
             <h1>Login</h1>
             <div class="content">
                 <div class="input-field">
-                    <input type="email" placeholder="Email" autocomplete="nope">
+                    <input type="email" placeholder="Email" autocomplete="nope" name="email">
                 </div>
                 <div class="input-field">
-                    <input type="password" placeholder="Password" autocomplete="new-password">
+                    <input type="password" placeholder="Password" autocomplete="new-password" name="password">
                 </div>
             </div>
             <div style="text-align:center">Don't Have Account?
@@ -160,9 +169,10 @@
                 <br>
             </div>
             <div class="action">
-                <a href="{{url('inquiry')}}">
-                    Sign in
-                </a>
+                <button class="btn btn-primary">Sign in</button>
+                {{-- <a href="{{url('/')}}">
+                Register
+                </a> --}}
             </div>
         </form>
     </div>

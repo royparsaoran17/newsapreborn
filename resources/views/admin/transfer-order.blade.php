@@ -7,27 +7,17 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li>
-                <a href="{{url('inquiry')}}">
-                    <i class="nc-icon nc-app"></i>
-                    <p>Inquiry</p>
-                </a>
-            </li>
+
             <li>
                 <a href="{{url('quotation')}}">
                     <i class="nc-icon nc-check-2"></i>
                     <p>Quotation</p>
-                </a>
-            </li>
-            <li>
-                <a href="{{url('purchase-order')}}">
-                    <i class="nc-icon nc-cart-simple"></i>
-                    <p>Purchase Order</p>
                 </a>
             </li>
             <li>
@@ -139,16 +129,27 @@
                         <h5 class="card-title">Create Transfer Order With Reference Outbound Delivery</h5>
                     </div>
                     <div class="card-body">
-                        <form>
+                        @if($errors->any())
+                        @foreach($errors->all() as $err)
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                              <i class="nc-icon nc-simple-remove"></i>
+                            </button>
+                            <span>{{ $err }}</span>
+                          </div>
+                        @endforeach
+                        @endif
+                        <form action="{{ route('transfer_order.action') }}" method="POST">
+                            {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Warehouse Number</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" name="warehouse_number">
                                             <option selected></option>
-                                            <option value="1">17772033 - Roy Parsaoran</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
                                         </select>
                                     </div>
                                 </div>
@@ -157,11 +158,11 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Outbound Delivery</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" name="outbound_delivery" required>
                                             <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @foreach ($ob as $key)
+                                            <option value="{{$key->id}}">OD-0{{$key->id}}</option>    
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>

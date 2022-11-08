@@ -7,7 +7,8 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
@@ -22,12 +23,6 @@
                 <a href="{{url('quotation')}}">
                     <i class="nc-icon nc-check-2"></i>
                     <p>Quotation</p>
-                </a>
-            </li>
-            <li>
-                <a href="{{url('purchase-order')}}">
-                    <i class="nc-icon nc-cart-simple"></i>
-                    <p>Purchase Order</p>
                 </a>
             </li>
             <li>
@@ -198,7 +193,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Desciption</label>
+                                        <label>Description</label>
                                         <input type="text" class="form-control">
                                     </div>
                                 </div>

@@ -7,27 +7,17 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li>
-                <a href="{{url('inquiry')}}">
-                    <i class="nc-icon nc-app"></i>
-                    <p>Inquiry</p>
-                </a>
-            </li>
+
             <li>
                 <a href="{{url('quotation')}}">
                     <i class="nc-icon nc-check-2"></i>
                     <p>Quotation</p>
-                </a>
-            </li>
-            <li>
-                <a href="{{url('purchase-order')}}">
-                    <i class="nc-icon nc-cart-simple"></i>
-                    <p>Purchase Order</p>
                 </a>
             </li>
             <li>
@@ -139,16 +129,27 @@
                         <h5 class="card-title">Display Accounting Document</h5>
                     </div>
                     <div class="card-body">
-                        <form>
+                        @if($errors->any())
+                        @foreach($errors->all() as $err)
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                              <i class="nc-icon nc-simple-remove"></i>
+                            </button>
+                            <span>{{ $err }}</span>
+                          </div>
+                        @endforeach
+                        @endif
+                        <form action="{{ route('accounting_document.action') }}" method="POST">
+                            {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Billing Document</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" id="accounting-billing-document-dropdown" name="billing_id">
                                             <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @foreach ($data as $key)
+                                            <option value="{{$key->id}}"> B-0{{$key->id}}</option>    
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -157,34 +158,22 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Accounting Document Number</label>
-                                        <input type="number" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Document Date</label>
-                                        <input type="number" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Currency</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" disabled id="accounting-document-dropdown">
                                     </div>
                                 </div>
                             </div>
                             <br>
-                            <h5>Material Detaails</h5>
-                            <hr>
+                            @if ($flag == false)
+                            <div class="row" hidden>
+                            @else
                             <div class="row">
+                            @endif
                                 <div class="col-md-12">
+                                    <h5>Material Details</h5>
+                                    <hr>
                                     <p></p>
-                                    <p>Company ID : 131231 </p>
-                                    <p>Company Name : PT Bahan Baku</p>
+                                    <p>Customer ID : C-0{{$billing->customer_id}} </p>
+                                    <p>Customer Name : {{$billing->user_name}}</p>
                                     <div class="table-responsive">
                                         <table class="table">
                                             <thead class=" text-primary">
@@ -207,44 +196,27 @@
                                             <tbody>
                                                 <tr>
                                                     <td>
-                                                        T-114
+                                                        M-0{{$billing->material_id}} {{$billing->material_name}}
                                                     </td>
                                                     <td>
-                                                        Beras
+                                                        {{$billing->description}}
                                                     </td>
                                                     <td>
-                                                        12
+                                                        {{$billing->billed_quantity}}
                                                     </td>
                                                     <td>
-                                                        600000
-                                                    </td>
-                                                    <td>
-                                                        IDR
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        T-115
-                                                    </td>
-                                                    <td>
-                                                        Kacang
-                                                    </td>
-                                                    <td>
-                                                        19
-                                                    </td>
-                                                    <td>
-                                                        870000
+                                                        {{$billing->net_value}}
                                                     </td>
                                                     <td>
                                                         IDR
                                                     </td>
-                                                </tr>
+                                                </tr>          
                                                 <tr style="background-color:lightgrey">
                                                     <th colspan="3" style="text-align:center">
                                                         Total Amount
                                                     </th>
                                                     <td>
-                                                        1470000
+                                                        {{$billing->net_value}}
                                                     </td>
                                                     <td>
                                                         IDR

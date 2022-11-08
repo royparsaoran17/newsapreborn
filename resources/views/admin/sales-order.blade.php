@@ -7,27 +7,17 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li>
-                <a href="{{url('inquiry')}}">
-                    <i class="nc-icon nc-app"></i>
-                    <p>Inquiry</p>
-                </a>
-            </li>
+
             <li>
                 <a href="{{url('quotation')}}">
                     <i class="nc-icon nc-check-2"></i>
                     <p>Quotation</p>
-                </a>
-            </li>
-            <li>
-                <a href="{{url('purchase-order')}}">
-                    <i class="nc-icon nc-cart-simple"></i>
-                    <p>Purchase Order</p>
                 </a>
             </li>
             <li class="active">
@@ -139,18 +129,39 @@
                         <h5 class="card-title">Create Sales Order (Overview)</h5>
                     </div>
                     <div class="card-body">
-                        <form>
+                        @if($errors->any())
+                        @foreach($errors->all() as $err)
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                              <i class="nc-icon nc-simple-remove"></i>
+                            </button>
+                            <span>{{ $err }}</span>
+                          </div>
+                        @endforeach
+                        @endif
+                        <form action="{{ route('sales_order.action') }}" method="POST">
+                            {{ csrf_field() }}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>PO Number</label>
+                                        <select class="form-control" aria-label="Default select example" name="purchase_order_id" id="admin-purchase-order">
+                                            <option selected></option>
+                                            @foreach ($po as $key)
+                                            <option value="{{$key->id}}">PO-0{{$key->id}}</option>    
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             <h5>Organizational Data</h5>
                             <hr>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Company</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" name="company_id" id="sales-order-company-name" required>
                                             <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
                                         </select>
                                     </div>
                                 </div>
@@ -159,12 +170,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Distribution Channel</label>
-                                        <select class="form-control" aria-label="Default select example">
-                                            <option selected></option>
-                                            <option value="1">17772033 - Roy Parsaoran</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
+                                        <input type="text" class="form-control" id="sales-order-distribution-channel">
                                     </div>
                                 </div>
                             </div>
@@ -172,24 +178,11 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Customer</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" name="customer_id" required>
                                             <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>PO Number</label>
-                                        <select class="form-control" aria-label="Default select example">
-                                            <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @foreach ($users as $key)
+                                            <option value="{{$key->id}}">C-0{{$key->id}} - {{$key->name}}</option>    
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -198,7 +191,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Request Delivery Date</label>
-                                        <input type="date" class="form-control">
+                                        <input type="date" class="form-control" name="req_delivery_date">
                                     </div>
                                 </div>
                             </div>
@@ -208,11 +201,8 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Material</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" name="material_id" id="sales-order-material" required>
                                             <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
                                         </select>
                                     </div>
                                 </div>
@@ -221,7 +211,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Order Quantity</label>
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control" name="quantity" id="sales-order-quamtity">
                                     </div>
                                 </div>
                             </div>
@@ -229,7 +219,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Descriptions</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" name="description" id="sales-order-description">
                                     </div>
                                 </div>
                             </div>
@@ -262,96 +252,38 @@
                                         PO Number
                                     </th>
                                     <th>
-                                        PO Number
+                                        Req. Delivery Date
                                     </th>
                                     <th>
-                                        Req. Delivery Date
+                                        Material
                                     </th>
                                     <th>
                                        Order Quantity
                                     </th>
                                 </thead>
                                 <tbody>
+                                    @foreach ($data as $key)
                                     <tr>
                                         <td>
-                                            12371236
+                                            SO-0{{$key->id}}
                                         </td>
                                         <td>
-                                            PT Makmur Jaya
+                                            C-0{{$key->customer_id}} - {{$key->user_name}}
                                         </td>
                                         <td>
-                                            000123132
+                                            PO-0{{$key->purchase_order_id}}
                                         </td>
                                         <td>
-                                            12/11/20
+                                            {{$key->req_delivery_date}}
                                         </td>
                                         <td>
-                                            T14 - Beras
+                                            M-0{{$key->material_id}} - {{$key->material_name}}
                                         </td>
                                         <td>
-                                            10
+                                            {{$key->quantity}}
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            12371236
-                                        </td>
-                                        <td>
-                                            PT Makmur Jaya
-                                        </td>
-                                        <td>
-                                            000123132
-                                        </td>
-                                        <td>
-                                            12/11/20
-                                        </td>
-                                        <td>
-                                            T14 - Beras
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            12371236
-                                        </td>
-                                        <td>
-                                            PT Makmur Jaya
-                                        </td>
-                                        <td>
-                                            000123132
-                                        </td>
-                                        <td>
-                                            12/11/20
-                                        </td>
-                                        <td>
-                                            T14 - Beras
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            12371236
-                                        </td>
-                                        <td>
-                                            PT Makmur Jaya
-                                        </td>
-                                        <td>
-                                            000123132
-                                        </td>
-                                        <td>
-                                            12/11/20
-                                        </td>
-                                        <td>
-                                            T14 - Beras
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

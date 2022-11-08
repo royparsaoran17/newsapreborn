@@ -7,17 +7,13 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li>
-                <a href="{{url('inquiry')}}">
-                    <i class="nc-icon nc-app"></i>
-                    <p>Inquiry</p>
-                </a>
-            </li>
+
             <li>
                 <a href="{{url('quotation')}}">
                     <i class="nc-icon nc-check-2"></i>
@@ -139,22 +135,33 @@
                         <h5 class="card-title">Post Incoming Payment</h5>
                     </div>
                     <div class="card-body">
-                        <form>
+                        @if($errors->any())
+                        @foreach($errors->all() as $err)
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                              <i class="nc-icon nc-simple-remove"></i>
+                            </button>
+                            <span>{{ $err }}</span>
+                          </div>
+                        @endforeach
+                        @endif
+                        <form action="{{ route('incoming_payment.action') }}" method="POST">
+                            {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Document Date</label>
-                                        <input type="date" class="form-control">
+                                        <input type="date" class="form-control" value="<?php echo date('Y-m-d'); ?>" disabled name="document_date"/>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Costumer</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <label>Customer</label>
+                                        <select class="form-control" aria-label="Default select example" name="customer_id">
                                             <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @foreach ($users as $key)
+                                            <option value="{{$key->id}}">C-0{{$key->id}} - {{$key->name}}</option>    
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -166,7 +173,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Bank Account Number</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" name="bank_account">
                                     </div>
                                 </div>
                             </div>
@@ -174,7 +181,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Total Amount</label>
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control" name="total_amount">
                                     </div>
                                 </div>
                             </div>

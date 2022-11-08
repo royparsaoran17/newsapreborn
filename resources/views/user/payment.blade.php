@@ -8,7 +8,8 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
@@ -90,24 +91,51 @@
                         <h5 class="card-title">Add Payment</h5>
                     </div>
                     <div class="card-body">
-                        <form>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Company Name</label>
-                                        <input type="text" class="form-control">
+                        @if($errors->any())
+                        @foreach($errors->all() as $err)
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                              <i class="nc-icon nc-simple-remove"></i>
+                            </button>
+                            <span>{{ $err }}</span>
+                          </div>
+                        @endforeach
+                        @endif
+                        <form action="{{ route('payment.action') }}" method="POST">
+                            {{ csrf_field() }}
+                            
+                            <div class="modal" id="myModal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Modal Heading</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        Modal body..
+                                    </div>
+                                
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Billing Document</label>
-                                        <select class="form-control" aria-label="Default select example">
-                                            <option selected></option>
-                                            <option value="1">17772033 - Roy Parsaoran</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                        <select class="form-control" aria-label="Default select example" name="billing_id" id="user-payment-billing">
+                                            <option selected></option>@foreach ($billing as $key)
+                                            <option value="{{$key->id}}">B-0{{$key->id}}</option>    
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -116,9 +144,17 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label>Billing Report</label>
-                                    <p></p>
-                                    <p>Company ID : 131231 </p>
-                                    <p>Company Name : PT Bahan Baku</p>
+                                    <div class="form-group">
+                                        <label>Company Name</label>
+                                        <input type="hidden" name="company_id" id="user-payment-company-id">
+                                        <select class="form-control" aria-label="Default select example" name="company_id" disabled id="user-payment-company">
+                                            <option selected></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
                                     <div class="table-responsive">
                                         <table class="table">
                                             <thead class=" text-primary">
@@ -140,45 +176,22 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>
-                                                        T-114
+                                                    <td id="payment-material-name">
                                                     </td>
-                                                    <td>
-                                                        Beras
+                                                    <td id="payment-material-description">
                                                     </td>
-                                                    <td>
-                                                        12
+                                                    <td id="payment-quantity">
                                                     </td>
-                                                    <td>
-                                                        600000
+                                                    <td id="payment-amount">
                                                     </td>
-                                                    <td>
-                                                        IDR
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        T-115
-                                                    </td>
-                                                    <td>
-                                                        Kacang
-                                                    </td>
-                                                    <td>
-                                                        19
-                                                    </td>
-                                                    <td>
-                                                        870000
-                                                    </td>
-                                                    <td>
-                                                        IDR
+                                                    <td id="payment-idr">
                                                     </td>
                                                 </tr>
                                                 <tr style="background-color:lightgrey">
                                                     <th colspan="3" style="text-align:center">
                                                         Total Amount
                                                     </th>
-                                                    <td>
-                                                        1470000
+                                                    <td id="payment-amount-2">
                                                     </td>
                                                     <td>
                                                         IDR
@@ -196,7 +209,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Bank Account</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" name="bank_account">
                                     </div>
                                 </div>
                             </div>
@@ -204,7 +217,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Bank Name</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" name="bank_name">
                                     </div>
                                 </div>
                             </div>
@@ -212,11 +225,11 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Payment Method</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" name="payment_method">
                                             <option selected></option>
-                                            <option value="1">17772033 - Roy Parsaoran</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            <option value="Transfer">Transfer</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="Credit">Credit</option>
                                         </select>
                                     </div>
                                 </div>
@@ -224,7 +237,7 @@
 
                             <div class="row">
                                 <div class="update ml-auto mr-auto">
-                                    <button type="submit" class="btn btn-primary btn-round">Create</button>
+                                    <button type="submit" class="btn btn-primary btn-round">Pay Now</button>
                                 </div>
                             </div>
                         </form>

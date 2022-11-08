@@ -7,27 +7,17 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li>
-                <a href="{{url('inquiry')}}">
-                    <i class="nc-icon nc-app"></i>
-                    <p>Inquiry</p>
-                </a>
-            </li>
+
             <li>
                 <a href="{{url('quotation')}}">
                     <i class="nc-icon nc-check-2"></i>
                     <p>Quotation</p>
-                </a>
-            </li>
-            <li>
-                <a href="{{url('purchase-order')}}">
-                    <i class="nc-icon nc-cart-simple"></i>
-                    <p>Purchase Order</p>
                 </a>
             </li>
             <li>
@@ -141,18 +131,19 @@
                     <div class="card-body">
                         <h5>Sales Report</h5>
                         <hr>
-                        <form>
+                        <form action="{{ route('report.action') }}" method="POST">
+                            {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>From</label>
-                                        <input type="date" class="form-control">
+                                        <input type="date" class="form-control" name="start_date">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>To</label>
-                                        <input type="date" class="form-control">
+                                        <input type="date" class="form-control" name="end_date">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -189,98 +180,31 @@
                                     </th>
                                 </thead>
                                 <tbody>
+                                    @foreach ($data as $key)
                                     <tr>
                                         <td>
-                                            10/10/2022
+                                            {{date("d-m-Y", strtotime($key->created_at))}}
                                         </td>
                                         <td>
-                                            T - 188
+                                            M-0{{$key->material_id}}
                                         </td>
                                         <td>
-                                            Beras
+                                            {{$key->material_name}}
                                         </td>
                                         <td>
-                                            Beras Premium
+                                            {{$key->description}}
                                         </td>
                                         <td>
-                                            10000000
+                                            {{$key->price}}
                                         </td>
                                         <td>
-                                            29
+                                            {{$key->quantity}}
                                         </td>
                                         <td>
-                                            12900000
+                                            {{$key->total}}
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            10/10/2022
-                                        </td>
-                                        <td>
-                                            T - 188
-                                        </td>
-                                        <td>
-                                            Beras
-                                        </td>
-                                        <td>
-                                            Beras Premium
-                                        </td>
-                                        <td>
-                                            10000000
-                                        </td>
-                                        <td>
-                                            29
-                                        </td>
-                                        <td>
-                                            12900000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            10/10/2022
-                                        </td>
-                                        <td>
-                                            T - 188
-                                        </td>
-                                        <td>
-                                            Beras
-                                        </td>
-                                        <td>
-                                            Beras Premium
-                                        </td>
-                                        <td>
-                                            10000000
-                                        </td>
-                                        <td>
-                                            29
-                                        </td>
-                                        <td>
-                                            12900000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            10/10/2022
-                                        </td>
-                                        <td>
-                                            T - 188
-                                        </td>
-                                        <td>
-                                            Beras
-                                        </td>
-                                        <td>
-                                            Beras Premium
-                                        </td>
-                                        <td>
-                                            10000000
-                                        </td>
-                                        <td>
-                                            29
-                                        </td>
-                                        <td>
-                                            12900000
-                                        </td>
-                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -289,7 +213,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <h5>Sales Amount : 2000000000000</h5>
+                                    <h5>Sales Amount : Rp {{$sales}}</h5>
                                 </div>
                             </div>
                         </div>

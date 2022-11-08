@@ -8,7 +8,8 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
@@ -90,18 +91,29 @@
                         <h5 class="card-title">Create Inquiry</h5>
                     </div>
                     <div class="card-body">
-                        <form>
+                        @if($errors->any())
+                        @foreach($errors->all() as $err)
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                              <i class="nc-icon nc-simple-remove"></i>
+                            </button>
+                            <span>{{ $err }}</span>
+                          </div>
+                        @endforeach
+                        @endif
+                        <form action="{{ route('inquiry.action') }}" method="POST">
+                            {{ csrf_field() }}
                             <h4>Organizational Data</h4>
                             <hr>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Company</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" name="company_id" required id="inquiry-company">
                                             <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @foreach ($company as $key)
+                                            <option value="{{$key->id}}">{{$key->id}} - {{$key->name}}</option>    
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -110,11 +122,8 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Distribution Channel</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" disabled id="inquiry-company-distribution">
                                             <option selected></option>
-                                            <option value="1">17772033 - Roy Parsaoran</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
                                         </select>
                                     </div>
                                 </div>
@@ -125,11 +134,11 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Material</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" name="material_id" required id="inquiry-material">
                                             <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @foreach ($material as $key)
+                                            <option value="{{$key->id}}">M-0{{$key->id}} - {{$key->name}}</option>    
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -138,15 +147,15 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Order Quantity</label>
-                                        <input type="text" class="form-control">
+                                        <input type="number" class="form-control" name="order_quantity" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Desciption</label>
-                                        <input type="text" class="form-control">
+                                        <label>Description</label>
+                                        <input type="text" class="form-control" disabled id="inquiry-material-description">
                                     </div>
                                 </div>
                             </div>
@@ -179,102 +188,38 @@
                                         Distribution Channel
                                     </th>
                                     <th>
-                                        Customer Name
+                                        Material Name
                                     </th>
                                     <th>
-                                        Customer Address
+                                        Order Quantity
+                                    </th>
+                                    <th>
+                                        Description
                                     </th>
                                 </thead>
                                 <tbody>
+                                    @foreach ($data as $key)
                                     <tr>
                                         <td>
-                                            123413123
+                                            I-0{{$key->id}}
                                         </td>
                                         <td>
-                                            PT Perusahaan
+                                            {{$key->company_name}}
                                         </td>
                                         <td>
-                                            10
+                                            {{$key->distribution_channel}}
                                         </td>
                                         <td>
-                                            PT Customer
+                                            {{$key->material_name}}
                                         </td>
                                         <td>
-                                            Jln Dakota ray
+                                            {{$key->order_quantity}}
+                                        </td>
+                                        <td>
+                                            {{$key->desc}}
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            123413123
-                                        </td>
-                                        <td>
-                                            PT Perusahaan
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                        <td>
-                                            PT Customer
-                                        </td>
-                                        <td>
-                                            Jln Dakota ray
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            123413123
-                                        </td>
-                                        <td>
-                                            PT Perusahaan
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                        <td>
-                                            PT Customer
-                                        </td>
-                                        <td>
-                                            Jln Dakota ray
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            123413123
-                                        </td>
-                                        <td>
-                                            PT Perusahaan
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                        <td>
-                                            PT Customer
-                                        </td>
-                                        <td>
-                                            Jln Dakota ray
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            123413123
-                                        </td>
-                                        <td>
-                                            PT Perusahaan
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                        <td>
-                                            PT Customer
-                                        </td>
-                                        <td>
-                                            Jln Dakota ray
-                                        </td>
-                                    </tr>
-                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

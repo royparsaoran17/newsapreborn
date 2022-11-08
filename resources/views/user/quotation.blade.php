@@ -8,7 +8,8 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
@@ -87,7 +88,7 @@
             <div class="col-md-12">
                 <div class="card card-user">
                     <div class="card-header">
-                        <h5 class="card-title">Display Quotation (Overview)</h5>
+                        <h5 class="card-title">Display Quotation</h5>
                     </div>
                     <div class="card-body">
                         <form>
@@ -95,11 +96,11 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Quotation</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" id="user-quotation">
                                             <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @foreach ($data as $key)
+                                            <option value="{{$key->id}}">Q-0{{$key->id}}</option>    
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -110,12 +111,15 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Company</label>
-                                        <select class="form-control" aria-label="Default select example">
-                                            <option selected></option>
-                                            <option value="1">17772033 - Roy Parsaoran</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
+                                        <input type="text" class="form-control" disabled id="quotation-company">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Distribution Channel</label>
+                                        <input type="text" class="form-control" disabled id="quotation-distribution">
                                     </div>
                                 </div>
                             </div>
@@ -125,27 +129,19 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Valid From</label>
-                                        <input type="date" class="form-control">
+                                        <input type="date" class="form-control" disabled id="quotation-valid-from">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Valod To</label>
-                                        <input type="date" class="form-control">
+                                        <label>Valid To</label>
+                                        <input type="date" class="form-control" disabled id="quotation-valid-to">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Net Value</label>
-                                        <input type="number" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Distribution Channel</label>
-                                        <input type="text" class="form-control">
+                                        <input type="number" class="form-control" disabled id="quotation-net-value">
                                     </div>
                                 </div>
                             </div>
@@ -153,12 +149,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Material Name</label>
-                                        <select class="form-control" aria-label="Default select example">
-                                            <option selected></option>
-                                            <option value="1">17772033 - Roy Parsaoran</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
+                                        <input type="text" class="form-control" disabled id="quotation-material">
                                     </div>
                                 </div>
                             </div>
@@ -166,15 +157,15 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Order Quantity</label>
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control" disabled id="quotation-quantity">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Desciption</label>
-                                        <input type="text" class="form-control">
+                                        <label>Description</label>
+                                        <input type="description" class="form-control" disabled id="quotation-material-description">
                                     </div>
                                 </div>
                             </div>

@@ -7,17 +7,13 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li>
-                <a href="{{url('inquiry')}}">
-                    <i class="nc-icon nc-app"></i>
-                    <p>Inquiry</p>
-                </a>
-            </li>
+
             <li>
                 <a href="{{url('quotation')}}">
                     <i class="nc-icon nc-check-2"></i>
@@ -138,17 +134,28 @@
                     <div class="card-header">
                         <h5 class="card-title">Display Document Flow</h5>
                     </div>
-                    <div class="card-body">
-                        <form>
+                    <div class="card-body">@if($errors->any())
+                        @foreach($errors->all() as $err)
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                              <i class="nc-icon nc-simple-remove"></i>
+                            </button>
+                            <span>{{ $err }}</span>
+                          </div>
+                        @endforeach
+                        @endif
+                        <form action="{{ route('document_flow.action') }}" method="POST">
+                            {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Document Type</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" name="document_type">
                                             <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            <option value="sales_order_id">Sales Order</option>
+                                            <option value="outbound_delivery_id">Outbound Delvery</option>
+                                            <option value="billing_id">Billing Document</option>
+                                            <option value="accounting_id">Accounting Document</option>
                                         </select>
                                     </div>
                                 </div>
@@ -157,7 +164,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Document Number</label>
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control" name="document_number">
                                     </div>
                                 </div>
                             </div>
@@ -172,9 +179,13 @@
                 </div>
             </div>
             <div class="col-md-12">
+                @if ($flag == false)
+                <div class="card" hidden>
+                @else
                 <div class="card">
+                @endif
                     <div class="card-header">
-                        <h4 class="card-title"> Inquiry</h4>
+                        <h4 class="card-title">Document FLow</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -191,39 +202,58 @@
                                     </th>
                                 </thead>
                                 <tbody>
+                                    @if (!empty($data->sales_order_id))
                                     <tr>
                                         <td>
-                                            0000123
+                                            SO - 0{{$data->sales_order_id}}
                                         </td>
                                         <td>
                                             Sales Order
                                         </td>
                                         <td>
-                                            12/09/2021
+                                            {{date("d-m-Y", strtotime($data->sales_order_created_at))}}
                                         </td>
                                     </tr>
+                                    @endif
+                                    @if (!empty($data->outbound_delivery_id))
                                     <tr>
                                         <td>
-                                            000188423
+                                            OD - 0{{$data->outbound_delivery_id}}
                                         </td>
                                         <td>
                                             Outbound Delivery
                                         </td>
                                         <td>
-                                            30/09/2021
+                                            {{date("d-m-Y", strtotime($data->outbound_delivery_created_at))}}
                                         </td>
                                     </tr>
+                                    @endif
+                                    @if (!empty($data->billing_id))
                                     <tr>
                                         <td>
-                                            1328123
+                                            BD - 0{{$data->billing_id}}
                                         </td>
                                         <td>
-                                            Transfer Order
+                                            Billing Document
                                         </td>
                                         <td>
-                                            12/12/2021
+                                            {{date("d-m-Y", strtotime($data->billing_created_at))}}
                                         </td>
                                     </tr>
+                                    @endif
+                                    @if (!empty($data->accounting_id))
+                                    <tr>
+                                        <td>
+                                            AD - 0{{$data->accounting_id}}
+                                        </td>
+                                        <td>
+                                            Accounting Document
+                                        </td>
+                                        <td>
+                                            {{date("d-m-Y", strtotime($data->accounting_created_at))}}
+                                        </td>
+                                    </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

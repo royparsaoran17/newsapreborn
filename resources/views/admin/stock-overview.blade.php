@@ -7,27 +7,17 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li>
-                <a href="{{url('inquiry')}}">
-                    <i class="nc-icon nc-app"></i>
-                    <p>Inquiry</p>
-                </a>
-            </li>
+
             <li>
                 <a href="{{url('quotation')}}">
                     <i class="nc-icon nc-check-2"></i>
                     <p>Quotation</p>
-                </a>
-            </li>
-            <li>
-                <a href="{{url('purchase-orderrr')}}">
-                    <i class="nc-icon nc-cart-simple"></i>
-                    <p>Purchase Order</p>
                 </a>
             </li>
             <li>
@@ -139,16 +129,27 @@
                         <h5 class="card-title">Update Stock Material</h5>
                     </div>
                     <div class="card-body">
-                        <form>
+                        @if($errors->any())
+                        @foreach($errors->all() as $err)
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                              <i class="nc-icon nc-simple-remove"></i>
+                            </button>
+                            <span>{{ $err }}</span>
+                          </div>
+                        @endforeach
+                        @endif
+                        <form action="{{ route('stock_overview.action') }}" method="POST">
+                            {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Material Name</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" name="id" required>
                                             <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @foreach ($data as $key)
+                                            <option value="{{$key->id}}">M-0{{$key->id}} - {{$key->name}}</option>    
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -157,7 +158,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Add Stock</label>
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control" name="quantity">
                                     </div>
                                 </div>
                             </div>
@@ -165,13 +166,13 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Warehouse Number</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" name="warehouse_number">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="update ml-auto mr-auto">
-                                    <button type="submit" class="btn btn-primary btn-round">Create</button>
+                                    <button type="submit" class="btn btn-primary btn-round">Update</button>
                                 </div>
                             </div>
                         </form>
@@ -201,62 +202,29 @@
                                     </th>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $no = 1; 
+                                    @endphp
+                                    @foreach ($data as $key)
                                     <tr>
                                         <td>
-                                            1
+                                            {{$no}}
                                         </td>
                                         <td>
-                                            T12 - Beras
+                                            M-0{{$key->id}} - {{$key->name}}
                                         </td>
                                         <td>
-                                            Beras
+                                            {{$key->description}}
                                         </td>
                                         <td>
-                                            100000
+                                            {{$key->quantity}}
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            2
-                                        </td>
-                                        <td>
-                                            T12 - Beras
-                                        </td>
-                                        <td>
-                                            Beras
-                                        </td>
-                                        <td>
-                                            100000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            3
-                                        </td>
-                                        <td>
-                                            T12 - Beras
-                                        </td>
-                                        <td>
-                                            Beras
-                                        </td>
-                                        <td>
-                                            100000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            4
-                                        </td>
-                                        <td>
-                                            T12 - Beras
-                                        </td>
-                                        <td>
-                                            Beras
-                                        </td>
-                                        <td>
-                                            100000
-                                        </td>
-                                    </tr>
+                                    
+                                    @php
+                                        $no++; 
+                                    @endphp
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

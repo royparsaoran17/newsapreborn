@@ -7,27 +7,17 @@
             </div>
         </a>
         <a href="" class="simple-text logo-normal">
-            SAP REBORN
+            Sistem Informasi<br>
+Logistik Digital
         </a>
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li>
-                <a href="{{url('inquiry')}}">
-                    <i class="nc-icon nc-app"></i>
-                    <p>Inquiry</p>
-                </a>
-            </li>
+
             <li>
                 <a href="{{url('quotation')}}">
                     <i class="nc-icon nc-check-2"></i>
                     <p>Quotation</p>
-                </a>
-            </li>
-            <li>
-                <a href="{{url('purchase-order')}}">
-                    <i class="nc-icon nc-cart-simple"></i>
-                    <p>Purchase Order</p>
                 </a>
             </li>
             <li>
@@ -139,26 +129,29 @@
                         <h5 class="card-title">Create Billing Document with Reference Outbound Delivery</h5>
                     </div>
                     <div class="card-body">
-                        <form>
+                        @if($errors->any())
+                        @foreach($errors->all() as $err)
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert"
+                                aria-label="Close">
+                                <i class="nc-icon nc-simple-remove"></i>
+                            </button>
+                            <span>{{ $err }}</span>
+                        </div>
+                        @endforeach
+                        @endif
+                        <form action="{{ route('billing_document.action') }}" method="POST">
+                            {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Outbound Delivery</label>
-                                        <select class="form-control" aria-label="Default select example">
+                                        <select class="form-control" aria-label="Default select example" name="outbound_delivery_id" id="admin-outbound-delivery">
                                             <option selected></option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @foreach ($ob as $key)
+                                            <option value="{{$key->id}}">OD-0{{$key->id}}</option>
+                                            @endforeach
                                         </select>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Invoice</label>
-                                        <input type="text" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +159,9 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Payer</label>
-                                        <input type="text" class="form-control">
+                                        <input type="hidden" name="material_id" id="outbound-val-material_id">
+                                        <input type="hidden" name="billed_quantity" id="outbound-val-billed_quantity">
+                                        <input type="text" class="form-control" disabled id="billing_document_customer">
                                     </div>
                                 </div>
                             </div>
@@ -174,7 +169,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Billing Date</label>
-                                        <input type="date" class="form-control">
+                                        <input type="date" class="form-control" value="<?php echo date('Y-m-d'); ?>" name="billing_date"/>
                                     </div>
                                 </div>
                             </div>
@@ -182,7 +177,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Net Value</label>
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control" name="net_value">
                                     </div>
                                 </div>
                             </div>
@@ -209,17 +204,14 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>
-                                            T-14 Beras
+                                        <td id="outbound-delivery-material-name">
+                                            
                                         </td>
-                                        <td>
-                                            Beras Import
+                                        <td id="outbound-delivery-material-description">
                                         </td>
-                                        <td>
-                                            12
+                                        <td id="outbound-delivery-quantity">
                                         </td>
-                                        <td>
-                                            500000
+                                        <td id="outbound-delivery-amount">
                                         </td>
                                     </tr>
                                 </tbody>
@@ -259,34 +251,22 @@
                                     </th>
                                 </thead>
                                 <tbody>
+                                    @foreach ($data as $key)
                                     <tr>
                                         <td>
-                                            58888123
+                                            B-0{{$key->id}}
                                         </td>
                                         <td>
-                                            PT Makmur Jaya
+                                            C-0{{$key->customer_id}} - {{$key->user_name}}
                                         </td>
                                         <td>
-                                            12/03/2022
+                                            {{$key->billing_date}}
                                         </td>
                                         <td>
-                                           1200000
+                                            {{$key->net_value}}
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            883777
-                                        </td>
-                                        <td>
-                                            PT Abadi Jaya
-                                        </td>
-                                        <td>
-                                            29/10/2022
-                                        </td>
-                                        <td>
-                                           2800000
-                                        </td>
-                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

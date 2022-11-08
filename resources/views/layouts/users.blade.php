@@ -6,9 +6,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>
-        1973021 - Eunike Tirza Kerenhapukh
-    </title>
+    <title>Sistem Informasi Logistik Digital</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
         name='viewport' />
     <!--     Fonts and icons     -->
@@ -23,8 +21,8 @@
 
 <body class="">
     <div class="wrapper ">
-        
-        
+
+
         @yield('users.content')
     </div>
     <!--   Core JS Files   -->
@@ -48,6 +46,64 @@
             $(this).addClass('active');
         })
 
+        $('#inquiry-company').change(function () {
+            $.getJSON("/dropdown/company/" + $(this).val(), function (data) {
+                var location = $('#inquiry-company-distribution');
+                location.empty();
+                location.append("<option value='" + data.id + "' selected>" + data.distribution_channel +"</option>");
+            });
+        });
+
+        $('#inquiry-material').change(function () {
+            $.getJSON("/dropdown/material/" + $(this).val(), function (data) {
+                var location = $('#inquiry-material-description');
+                location.empty();
+                location.val(data.description)
+            });
+        });
+
+        $('#user-inquiry-po').change(function () {
+            console.log("3");
+            $.getJSON("/dropdown/inquiry/" + $(this).val(), function (data) {
+                var location = $('#inquiry-company-po');
+                location.empty();
+                location.append("<option value='" + data.company_id + "' selected> (C-0"+data.company_id+") "+data.company_name +"</option>");
+                
+                var location2 = $('#inquiry-material-po');
+                location2.empty();
+                location2.append("<option value='" + data.material_id + "' selected>  (M-0"+data.material_id+") "+data.material_name +"</option>");
+                $('#inquiry-po-quantity').val(data.order_quantity);
+            });
+        });
+
+        $('#user-quotation').change(function () {
+            $.getJSON("/dropdown/quotation/" + $(this).val(), function (data) {
+                $('#quotation-company').val(data.company_name);
+                $('#quotation-distribution').val(data.distribution_channel);
+                $('#quotation-valid-from').val(data.valid_from);
+                $('#quotation-valid-to').val(data.valid_to);
+                $('#quotation-net-value').val(data.net_value);
+                $('#quotation-material').val("M-0" + data.material_id + " " + data.material_name);
+                $('#quotation-quantity').val(data.order_quantity);
+                $('#quotation-material-description').val(data.description);
+            });
+        });
+
+        $('#user-payment-billing').change(function () {
+            $.getJSON("/dropdown/billing-document/" + $(this).val(), function (data) {
+                $('#payment-material-name').html("(M-0" + data.material_id + ") "+ data.material_name);
+                $('#payment-material-description').html(data.description);
+                $('#payment-quantity').html(data.billed_quantity);
+                $('#payment-amount').html(data.net_value);
+                $('#payment-amount-2').html(data.net_value);
+                $('#payment-idr').html("IDR");
+                $('#user-payment-company-id').val(data.company_id);
+
+                var location = $('#user-payment-company');
+                location.empty();
+                location.append("<option value='" + data.company_id + "' selected> (C-0" + data.company_id +") "+data.company_name+"</option>");
+            });
+        });
     </script>
 </body>
 
