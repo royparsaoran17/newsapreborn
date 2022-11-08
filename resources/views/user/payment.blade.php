@@ -103,30 +103,25 @@ Logistik Digital
                         @endif
                         <form action="{{ route('payment.action') }}" method="POST">
                             {{ csrf_field() }}
-                            
-                            <div class="modal" id="myModal">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                
-                                    <!-- Modal Header -->
+                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"  style="text-align: center">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                  <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title">Modal Heading</h4>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
                                     </div>
-                                
-                                    <!-- Modal body -->
                                     <div class="modal-body">
-                                        Modal body..
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="green" class="bi bi-check" viewBox="0 0 16 16">
+                                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                                          </svg>
+                                          <h5 class="modal-title" id="exampleModalLongTitle">Payment Success</h5>
                                     </div>
-                                
-                                    <!-- Modal footer -->
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                                     </div>
-                                
-                                    </div>
+                                  </div>
                                 </div>
-                            </div>
+                              </div>
 
                             <div class="row">
                                 <div class="col-md-12">
@@ -140,6 +135,12 @@ Logistik Digital
                                     </div>
                                 </div>
                             </div>
+                            @if($flagPayment == true)
+                            <input type="hidden" id="flagPayment" value="1">
+                            @endif
+                            @if($flagPayment == false)
+                            <input type="hidden" id="flagPayment" value="2">
+                            @endif
                             <hr>
                             <div class="row">
                                 <div class="col-md-12">
@@ -234,7 +235,6 @@ Logistik Digital
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="update ml-auto mr-auto">
                                     <button type="submit" class="btn btn-primary btn-round">Pay Now</button>
@@ -265,4 +265,7 @@ Logistik Digital
     </footer>
 </div>
 
+<script type="text/javascript">
+ 
+</script>
 @endsection

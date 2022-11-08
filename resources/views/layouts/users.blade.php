@@ -104,6 +104,13 @@
                 location.append("<option value='" + data.company_id + "' selected> (C-0" + data.company_id +") "+data.company_name+"</option>");
             });
         });
+
+        $(window).on('load', function() {
+            var x = document.getElementById("flagPayment").value;
+            if(x == 1){
+                $('#exampleModalCenter').modal('show');
+            }
+        });  
     </script>
 </body>
 
