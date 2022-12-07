@@ -200,6 +200,9 @@ Logistik Digital
                                     <th>
                                         Delivery Address
                                     </th>
+                                    <th>
+                                        
+                                    </th>
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $key)
@@ -221,6 +224,15 @@ Logistik Digital
                                         </td>
                                         <td>
                                             {{$key->delivery_address}}
+                                        </td>
+                                        <td style="text-align: center">
+                                            <div class="update ml-auto mr-auto">
+                                                <form action="{{ URL('purchase-order/'.$key->id.'/delete') }}" method="POST">
+                                                    {{ csrf_field() }}
+                                                    <button type="submit"
+                                                        class="btn btn-danger btn-round">Delete</button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                     @endforeach

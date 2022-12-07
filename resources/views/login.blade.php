@@ -155,14 +155,26 @@
         <form action="{{ route('login.action') }}" method="POST">
             {{ csrf_field() }}
             <h1>Login</h1>
-            <div class="content">
+                <div class="content" >
+                    <div class="form-group" style="text-align:left">
+                        <label>Email</label>
+                        <input type="text" class="form-control" autocomplete="nope" name="email">
+                    </div>
+                    <br>
+                    <div class="form-group" style="text-align:left" >
+                        <label>Password</label>
+                        <input type="password" class="form-control" autocomplete="new-password" name="password">
+                    </div>
+                </div>
+            
+            <!-- <div class="content">
                 <div class="input-field">
                     <input type="email" placeholder="Email" autocomplete="nope" name="email">
                 </div>
                 <div class="input-field">
                     <input type="password" placeholder="Password" autocomplete="new-password" name="password">
                 </div>
-            </div>
+            </div> -->
             <div style="text-align:center">Don't Have Account?
                 <a href="{{url('register')}}">Register</a>
                 <br>

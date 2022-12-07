@@ -141,7 +141,7 @@ Logistik Digital
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Net Value</label>
-                                        <input type="number" class="form-control" disabled id="quotation-net-value">
+                                        <input type="text" class="form-control" disabled id="quotation-net-value">
                                     </div>
                                 </div>
                             </div>

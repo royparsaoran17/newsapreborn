@@ -59,7 +59,14 @@ Route::post('/incoming-payment', [AdminController::class, 'incoming_payment_acti
 Route::get('/document-flow', [AdminController::class, 'document_flow'])->name('document_flow');
 Route::post('/document-flow', [AdminController::class, 'document_flow_action'])->name('document_flow.action');
 
+Route::get('/material-purchasing', [AdminController::class, 'material_purchasing'])->name('material_purchasing');
+Route::post('/material-purchasing', [AdminController::class, 'material_purchasing_action'])->name('material_purchasing.action');
+
 Route::get('/report', [AdminController::class, 'report'])->name('report');
+
+Route::get('/logs', [AdminController::class, 'logs'])->name('logs');
+Route::post('/logs', [AdminController::class, 'logs_action'])->name('logs.action');
+
 Route::post('/report', [AdminController::class, 'report_action'])->name('report.action');
 
 
@@ -88,3 +95,20 @@ Route::get('admin/dropdown/purchase-order/{id}', [DataController::class, 'admin_
 Route::get('admin/dropdown/sales-order/{id}', [DataController::class, 'admin_dropdown_sales_order'])->name('admin_dropdown_sales_order');
 Route::get('admin/dropdown/outbound-delivery/{id}', [DataController::class, 'admin_dropdown_outbound_delivery'])->name('admin_dropdown_outbound_delivery');
 Route::get('admin/dropdown/accounting-document/{id}', [DataController::class, 'admin_dropdown_accounting_document'])->name('admin_dropdown_accounting_document');
+
+// SOFT DELETE
+Route::post('accounting-document/{id}/delete', [DataController::class, 'accounting_document_delete'])->name('accounting_document_delete');
+Route::post('billing-document/{id}/delete', [DataController::class, 'billing_document_delete'])->name('billing_document_delete');
+Route::post('company/{id}/delete', [DataController::class, 'company_delete'])->name('company_delete');
+Route::post('document-flow/{id}/delete', [DataController::class, 'document_flow_delete'])->name('document_flow_delete');
+Route::post('incoming-payment/{id}/delete', [DataController::class, 'incoming_payment_delete'])->name('incoming_payment_delete');
+Route::post('inquiry/{id}/delete', [DataController::class, 'inquiry_delete'])->name('inquiry_delete');
+Route::post('material/{id}/delete', [DataController::class, 'material_delete'])->name('material_delete');
+Route::post('outbound-delivery/{id}/delete', [DataController::class, 'outbound_delivery_delete'])->name('outbound_delivery_delete');
+Route::post('purchase-order/{id}/delete', [DataController::class, 'purchase_order_delete'])->name('purchase_order_delete');
+Route::post('quotation/{id}/delete', [DataController::class, 'quotation_delete'])->name('quotation_delete');
+Route::post('report/{id}/delete', [DataController::class, 'report_delete'])->name('report_delete');
+Route::post('sales-order/{id}/delete', [DataController::class, 'sales_order_delete'])->name('sales_order_delete');
+Route::post('transfer-order/{id}/delete', [DataController::class, 'transfer_order_delete'])->name('transfer_order_delete');
+Route::post('users-payment/{id}/delete', [DataController::class, 'user_payment_delete'])->name('user_payment_delete');
+Route::post('users/{id}/delete', [DataController::class, 'user_delete'])->name('user_delete');

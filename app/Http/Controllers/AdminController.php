@@ -17,6 +17,8 @@ use App\Models\OutboundDelivery;
 use App\Models\Quotation;
 use App\Models\SalesOrder;
 use App\Models\TransferOrder;
+use App\Models\Logs;
+use App\Models\MaterialPurchasing;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -31,15 +33,18 @@ class AdminController extends Controller
             ->join('inquiry', 'quotation.inquiry_id', '=', 'inquiry.id')
             ->join('users', 'quotation.customer_id', '=', 'users.id')
             ->join('material', 'inquiry.material_id', '=', 'material.id')
+            ->where('quotation.deleted_at',null)
             ->get();
 
         $inquiry = DB::table('inquiry')
+            ->where('deleted_at',null)
             ->get();
 
         // dd($inquiry);
             
         $users = DB::table('users')
             ->where('email','!=','admin@email.com')
+            ->where('deleted_at',null)
             ->get();
 
         return view('admin.quotation')
@@ -63,23 +68,34 @@ class AdminController extends Controller
             'customer_id' => $request->customer_id,
             'valid_from' => $request->valid_from,
             'valid_to' => $request->valid_to,
-            'net_value' => $request->net_value,
+            'net_value' => str_replace(".","",str_replace("Rp","",$request->net_value)),
         ]);
 
         $quo->save();
+
+        
+        $log = new Logs([
+            'document_type' => "quotation",
+            'document_id' => $quo->id,
+            'action' => "create",
+        ]);
+        $log->save();
 
         $data = DB::table('quotation')
             ->select('users.name as user_name','material.name as material_name',"quotation.*",'inquiry.material_id','inquiry.order_quantity')
             ->join('inquiry', 'quotation.inquiry_id', '=', 'inquiry.id')
             ->join('users', 'quotation.customer_id', '=', 'users.id')
             ->join('material', 'inquiry.material_id', '=', 'material.id')
+            ->where('quotation.deleted_at',null)
             ->get();
 
         $inquiry = DB::table('inquiry')
+            ->where('deleted_at',null)
             ->get();
         
         $users = DB::table('users')
             ->where('email','!=','admin@email.com')
+            ->where('deleted_at',null)
             ->get();
 
         return view('admin.quotation')
@@ -97,9 +113,11 @@ class AdminController extends Controller
     public function sales_order()
     {
         $po = DB::table('purchase_order')
+            ->where('deleted_at',null)
             ->get();
 
         $users = DB::table('users')
+            ->where('deleted_at',null)
             ->where('email','!=','admin@email.com')
             ->get();
 
@@ -108,6 +126,7 @@ class AdminController extends Controller
             ->join('purchase_order', 'sales_order.purchase_order_id', '=', 'purchase_order.id')
             ->join('users', 'sales_order.customer_id', '=', 'users.id')
             ->join('material', 'purchase_order.material_id', '=', 'material.id')
+            ->where('sales_order.deleted_at',null)
             ->get();
         
         return view('admin.sales-order')
@@ -136,6 +155,13 @@ class AdminController extends Controller
 
         $quo->save();
 
+        $log = new Logs([
+            'document_type' => "sales_order",
+            'document_id' => $quo->id,
+            'action' => "create",
+        ]);
+        $log->save();
+
         $docs_flow = new DocumentFlow([
             'sales_order_id' => $quo->id,
             'sales_order_created_at' => $quo->created_at,
@@ -143,11 +169,13 @@ class AdminController extends Controller
         $docs_flow->save();
 
         $po = DB::table('purchase_order')
+            ->where('deleted_at',null)
             ->get();
         
             
         $users = DB::table('users')
             ->where('email','!=','admin@email.com')
+            ->where('deleted_at',null)
             ->get();
 
         $data = DB::table('sales_order')
@@ -155,6 +183,7 @@ class AdminController extends Controller
             ->join('purchase_order', 'sales_order.purchase_order_id', '=', 'purchase_order.id')
             ->join('users', 'sales_order.customer_id', '=', 'users.id')
             ->join('material', 'purchase_order.material_id', '=', 'material.id')
+            ->where('sales_order.deleted_at',null)
             ->get();
         
         return view('admin.sales-order')
@@ -166,6 +195,7 @@ class AdminController extends Controller
     public function outbound_delivery()
     {
         $so = DB::table('sales_order')
+            ->where('deleted_at',null)
             ->get();
 
         $data = DB::table('outbound_delivery')
@@ -174,6 +204,7 @@ class AdminController extends Controller
             ->join('purchase_order', 'sales_order.purchase_order_id', '=', 'purchase_order.id')
             ->join('users', 'sales_order.customer_id', '=', 'users.id')
             ->join('material', 'sales_order.material_id', '=', 'material.id')
+            ->where('outbound_delivery.deleted_at',null)
             ->get();
         
         return view('admin.outbound-delivery')
@@ -198,16 +229,36 @@ class AdminController extends Controller
 
         $od->save();
 
+        $log = new Logs([
+            'document_type' => "outbound_delivery",
+            'document_id' => $od->id,
+            'action' => "create",
+        ]);
+        $log->save();
+
+
         $df = DB::table('document_flow')
             ->where('sales_order_id',$request->sales_order_id)
+            ->where('deleted_at',null)
             ->first();
+
         DocumentFlow::where('id', $df->id)
             ->update([
                 'outbound_delivery_id' =>  $od->id,
                 'outbound_delivery_created_at' =>  $od->created_at,
             ]);
 
+        
+        $log = new Logs([
+            'document_type' => "document_flow",
+            'document_id' => $df->id,
+            'action' => "update",
+        ]);
+        $log->save();
+    
+
         $so = DB::table('sales_order')
+            ->where('deleted_at',null)
             ->get();
 
         $data = DB::table('outbound_delivery')
@@ -216,6 +267,7 @@ class AdminController extends Controller
             ->join('purchase_order', 'sales_order.purchase_order_id', '=', 'purchase_order.id')
             ->join('users', 'sales_order.customer_id', '=', 'users.id')
             ->join('material', 'sales_order.material_id', '=', 'material.id')
+            ->where('outbound_delivery.deleted_at',null)
             ->get();
         
         return view('admin.outbound-delivery')
@@ -232,6 +284,7 @@ class AdminController extends Controller
             ->join('users', 'sales_order.customer_id', '=', 'users.id')
             ->join('material', 'sales_order.material_id', '=', 'material.id')
             ->where('outbound_delivery.id',$id)
+            ->where('outbound_delivery.deleted_at',null)
             ->first();
 
         $qty = $data2->quantity;
@@ -253,7 +306,17 @@ class AdminController extends Controller
             ]);
         }
 
+        
+        $log = new Logs([
+            'document_type' => "outbound_delivery",
+            'document_id' => $id,
+            'action' => "update",
+        ]);
+        $log->save();
+
+
         $so = DB::table('sales_order')
+            ->where('deleted_at',null)
             ->get();
 
         $data = DB::table('outbound_delivery')
@@ -262,6 +325,7 @@ class AdminController extends Controller
             ->join('purchase_order', 'sales_order.purchase_order_id', '=', 'purchase_order.id')
             ->join('users', 'sales_order.customer_id', '=', 'users.id')
             ->join('material', 'sales_order.material_id', '=', 'material.id')
+            ->where('outbound_delivery.deleted_at',null)
             ->get();
         
         return view('admin.outbound-delivery')
@@ -272,6 +336,7 @@ class AdminController extends Controller
     public function transfer_order()
     {
         $ob = DB::table('outbound_delivery')
+            ->where('deleted_at',null)
             ->get();
         
         return view('admin.transfer-order')
@@ -287,7 +352,17 @@ class AdminController extends Controller
 
         $od->save();
 
+        
+        $log = new Logs([
+            'document_type' => "transfer_order",
+            'document_id' => $od->id,
+            'action' => "create",
+        ]);
+        $log->save();
+
+
         $ob = DB::table('outbound_delivery')
+            ->where('deleted_at',null)
             ->get();
         
 
@@ -298,6 +373,7 @@ class AdminController extends Controller
     public function stock_overview()
     {
         $data = DB::table('material')
+            ->where('deleted_at',null)
             ->get();
         
         return view('admin.stock-overview')
@@ -310,12 +386,14 @@ class AdminController extends Controller
         if ( $request->warehouse_number != null) {
             Material::where('id', $request->id)
                 ->update(['warehouse_number' =>  $request->warehouse_number]);
+                
         }
 
         // dd($request->quantity);
         if ( $request->quantity != null) {
             $m = DB::table('material')
                 ->where('id', $request->id)
+                ->where('deleted_at',null)
                 ->get();
     
             // dd($m[0]->quantity + $request->quantity);
@@ -325,6 +403,7 @@ class AdminController extends Controller
         }
 
         $data = DB::table('material')
+            ->where('deleted_at',null)
             ->get();
 
         return view('admin.stock-overview')
@@ -334,13 +413,15 @@ class AdminController extends Controller
     public function billing_document()
     {
         $ob = DB::table('outbound_delivery')
-        ->get();
+            ->where('deleted_at',null)
+            ->get();
 
         $data = DB::table('billing_document')
             ->select('users.name as user_name',"billing_document.*",'users.id as customer_id')
             ->join('outbound_delivery', 'outbound_delivery.id', '=', 'billing_document.outbound_delivery_id')
             ->join('sales_order', 'outbound_delivery.sales_order_id', '=', 'sales_order.id')
             ->join('users', 'sales_order.customer_id', '=', 'users.id')
+            ->where('billing_document.deleted_at',null)
             ->get();
         
         return view('admin.billing-document')
@@ -359,7 +440,7 @@ class AdminController extends Controller
         $quo = new BillingDocument([
             'outbound_delivery_id' => $request->outbound_delivery_id,
             'billing_date' => $request->billing_date,
-            'net_value' => $request->net_value,
+            'net_value' => str_replace(".","",str_replace("Rp","",$request->net_value)),
             'material_id' => $request->material_id,
             'billed_quantity' => $request->billed_quantity,
             
@@ -367,45 +448,87 @@ class AdminController extends Controller
 
         $quo->save();
 
+        
+        $log = new Logs([
+            'document_type' => "billing_document",
+            'document_id' => $quo->id,
+            'action' => "create",
+        ]);
+        $log->save();
+
+
         $df = DB::table('document_flow')
             ->where('outbound_delivery_id',$request->outbound_delivery_id)
+            ->where('deleted_at',null)
             ->first();
+
         DocumentFlow::where('id', $df->id)
             ->update([
                 'billing_id' =>  $quo->id,
                 'billing_created_at' =>  $quo->created_at,
             ]);
 
+            
+        $log = new Logs([
+            'document_type' => "document_flow",
+            'document_id' => $df->id,
+            'action' => "update",
+        ]);
+        $log->save();
+
+
         $ad = new AccountingDocument([
             'billing_document_id' => $quo->id,
-            'total_amount' => $request->net_value,
+            'total_amount' => str_replace(".","",str_replace("Rp","",$request->net_value)),
             'material_id' => $request->material_id,
             
         ]);
 
         $ad->save();
 
+        
+        $log = new Logs([
+            'document_type' => "accounting_document",
+            'document_id' => $ad->id,
+            'action' => "update",
+        ]);
+        $log->save();
+
+
         $df = DB::table('document_flow')
         ->where('billing_id',$quo->id)
+        ->where('deleted_at',null)
         ->first();
+
         DocumentFlow::where('id', $df->id)
             ->update([
                 'accounting_id' =>  $ad->id,
                 'accounting_created_at' =>  $ad->created_at,
             ]);
 
+        
+        $log = new Logs([
+            'document_type' => "document_flow",
+            'document_id' => $df->id,
+            'action' => "update",
+        ]);
+        $log->save();
+    
 
         BillingDocument::where('id', $quo->id)
             ->update(['invoice_id' =>  "11021" . $quo->id]);
 
+            
         $ob = DB::table('outbound_delivery')
-        ->get();
+            ->where('deleted_at',null)
+            ->get();
 
         $data = DB::table('billing_document')
             ->select('users.name as user_name',"billing_document.*",'users.id as customer_id')
             ->join('outbound_delivery', 'outbound_delivery.id', '=', 'billing_document.outbound_delivery_id')
             ->join('sales_order', 'outbound_delivery.sales_order_id', '=', 'sales_order.id')
             ->join('users', 'sales_order.customer_id', '=', 'users.id')
+            ->where('billing_document.deleted_at',null)
             ->get();
         
         return view('admin.billing-document')
@@ -416,7 +539,8 @@ class AdminController extends Controller
     public function accounting_document()
     {
         $data = DB::table('billing_document')
-        ->get();
+            ->where('deleted_at',null)
+            ->get();
 
         $billing = DB::table('billing_document')
         ->select('users.name as user_name',"billing_document.*",'users.id as customer_id','material.name as material_name','material.id as material_id','material.price as price','material.description as description')
@@ -424,6 +548,7 @@ class AdminController extends Controller
         ->join('outbound_delivery', 'outbound_delivery.id', '=', 'billing_document.outbound_delivery_id')
         ->join('sales_order', 'outbound_delivery.sales_order_id', '=', 'sales_order.id')
         ->join('users', 'sales_order.customer_id', '=', 'users.id')
+        ->where('billing_document.deleted_at',null)
         ->first();
 
         $flag = false;
@@ -437,16 +562,18 @@ class AdminController extends Controller
     public function accounting_document_action(Request $request)
     {
         $data = DB::table('billing_document')
-        ->get();
+            ->where('deleted_at',null)
+            ->get();
 
         $billing = DB::table('billing_document')
-        ->select('users.name as user_name',"billing_document.*",'users.id as customer_id','material.name as material_name','material.id as material_id','material.price as price','material.description as description')
-        ->join('material', 'billing_document.material_id', '=', 'material.id')
-        ->join('outbound_delivery', 'outbound_delivery.id', '=', 'billing_document.outbound_delivery_id')
-        ->join('sales_order', 'outbound_delivery.sales_order_id', '=', 'sales_order.id')
-        ->join('users', 'sales_order.customer_id', '=', 'users.id')
-        ->where('billing_document.id',$request->billing_id)
-        ->first();
+            ->select('users.name as user_name',"billing_document.*",'users.id as customer_id','material.name as material_name','material.id as material_id','material.price as price','material.description as description')
+            ->join('material', 'billing_document.material_id', '=', 'material.id')
+            ->join('outbound_delivery', 'outbound_delivery.id', '=', 'billing_document.outbound_delivery_id')
+            ->join('sales_order', 'outbound_delivery.sales_order_id', '=', 'sales_order.id')
+            ->join('users', 'sales_order.customer_id', '=', 'users.id')
+            ->where('billing_document.id',$request->billing_id)
+            ->where('billing_document.deleted_at',null)
+            ->first();
 
         $flag = true;
         return view('admin.accounting-document')
@@ -460,6 +587,7 @@ class AdminController extends Controller
         
         $users = DB::table('users')
             ->where('email','!=','admin@email.com')
+            ->where('deleted_at',null)
             ->get();
 
         return view('admin.incoming-payment')
@@ -479,13 +607,23 @@ class AdminController extends Controller
             'posting_date' => date('Y-m-d'),
             'customer_id' => $request->customer_id,
             'bank_account' => $request->bank_account,
-            'total_amount' => $request->total_amount,
+            'total_amount' => str_replace(".","",str_replace("Rp","",$request->total_amount)),
         ]);
 
         $quo->save();
 
+        
+        $log = new Logs([
+            'document_type' => "incoming_payment",
+            'document_id' => $quo->id,
+            'action' => "create",
+        ]);
+        $log->save();
+
+
         $users = DB::table('users')
             ->where('email','!=','admin@email.com')
+            ->where('deleted_at',null)
             ->get();
 
         return view('admin.incoming-payment')
@@ -495,7 +633,8 @@ class AdminController extends Controller
     public function document_flow()
     {
         $data = DB::table('document_flow')
-        ->first();
+            ->where('deleted_at',null)
+            ->first();
 
         $flag = false;
         return view('admin.document-flow')
@@ -506,8 +645,9 @@ class AdminController extends Controller
     public function document_flow_action(Request $request)
     {
         $data = DB::table('document_flow')
-        ->where($request->document_type,$request->document_number)
-        ->first();
+            ->where($request->document_type,$request->document_number)
+            ->where('deleted_at',null)
+            ->first();
 
         if (empty($data)) {
             return redirect('document-flow')->withErrors([
@@ -517,7 +657,64 @@ class AdminController extends Controller
 
         $flag = true;
         return view('admin.document-flow')
-        ->with('flag', $flag)
+            ->with('flag', $flag)
+            ->with('data', $data);
+    }
+
+    public function material_purchasing()
+    {
+        $data = DB::table('material_purchasing')
+            ->where('deleted_at',null)
+            ->get();
+        
+        $material = DB::table('material')
+            ->where('deleted_at',null)
+            ->get();
+
+        return view('admin.material-purchasing')
+        ->with('material', $material)
+        ->with('data', $data);
+    }
+
+    public function material_purchasing_action(Request $request)
+    {
+        $quo = new MaterialPurchasing([
+            'material_id' => $request->material_id,
+            'vendor' => $request->vendor,
+            'quantity' => $request->quantity,
+            'net_value' =>  str_replace(".","",str_replace("Rp","",$request->net_value)),
+        ]);
+        $quo->save();
+
+        if ( $request->quantity != null) {
+            $m = DB::table('material')
+                ->where('id', $request->material_id)
+                ->where('deleted_at',null)
+                ->first();
+    
+            Material::where('id', $request->material_id)
+                ->update(['quantity' =>  ($m->quantity + $request->quantity)]);
+        }
+
+        $log = new Logs([
+            'document_type' => "material_purchasing",
+            'document_id' => $quo->id,
+            'action' => "buy ".$request->quantity." with price ".$request->net_value,
+        ]);
+        $log->save();
+
+        $data = DB::table('material_purchasing')
+            ->where('deleted_at',null)
+            ->get();
+        
+        $material = DB::table('material')
+            ->where('deleted_at',null)
+            ->get();
+
+        
+
+        return view('admin.material-purchasing')
+        ->with('material', $material)
         ->with('data', $data);
     }
 
@@ -527,6 +724,7 @@ class AdminController extends Controller
         $data = DB::table('billing_document')
         ->select('billing_document.net_value as total','billing_document.billed_quantity as quantity','material.name as material_name','material.id as material_id','material.price as price','material.description as description','billing_document.created_at')
         ->join('material', 'billing_document.material_id', '=', 'material.id')
+        ->where('billing_document.deleted_at',null)
         ->get();
 
         $sales = 0;
@@ -540,6 +738,37 @@ class AdminController extends Controller
         ->with('data', $data);
     }
 
+    public function logs()
+    {
+
+        $data = DB::table('logs')
+        ->get();
+
+        return view('admin.logs')
+        ->with('data', $data);
+    }
+
+    public function logs_action(Request $request)
+    {
+        
+        $request->validate([
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'document_type' => 'required',
+        ]);
+
+        $data = DB::table('logs')
+            ->where('created_at','>=',$request->start_date)
+            ->where('created_at','<=',$request->end_date)
+            ->where('document_type',$request->document_type)
+            ->where('deleted_at',null)
+            ->get();
+
+
+        return view('admin.logs')
+        ->with('data', $data);
+    }
+
     public function report_action(Request $request)
     {
 
@@ -548,6 +777,7 @@ class AdminController extends Controller
             ->join('material', 'billing_document.material_id', '=', 'material.id')
             ->where('billing_document.created_at','>=',$request->start_date)
             ->where('billing_document.created_at','<=',$request->end_date)
+            ->where('billing_document.deleted_at',null)
             ->get();
 
         $sales = 0;
@@ -559,4 +789,7 @@ class AdminController extends Controller
         ->with('sales', $sales)
         ->with('data', $data);
     }
+
+
+
 }

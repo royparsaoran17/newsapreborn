@@ -44,6 +44,12 @@
                     <p>Stock Overview</p>
                 </a>
             </li>
+            <li>
+                <a href="{{url('material-purchasing')}}">
+                    <i class="nc-icon nc-simple-add"></i>
+                    <p>Material Purchasing</p>
+                </a>
+            </li>
 
             <li>
                 <a href="{{url('billing-document')}}">
@@ -73,6 +79,12 @@
                 <a href="{{url('report')}}">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Report</p>
+                </a>
+            </li>
+            <li>
+                <a href="{{url('logs')}}">
+                    <i class="nc-icon nc-app"></i>
+                    <p>Log</p>
                 </a>
             </li>
         </ul>
@@ -275,6 +287,9 @@
                                     <th>
                                         Goods Issue
                                     </th>
+                                    <th>
+                                        
+                                    </th>
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $key)
@@ -314,6 +329,15 @@
                                                 <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
                                               </svg>
                                             @endif
+                                        </td>
+                                        <td style="text-align: center">
+                                            <div class="update ml-auto mr-auto">
+                                                <form action="{{ URL('outbound-delivery/'.$key->id.'/delete') }}" method="POST">
+                                                    {{ csrf_field() }}
+                                                    <button type="submit"
+                                                        class="btn btn-danger btn-round">Delete</button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                     @endforeach

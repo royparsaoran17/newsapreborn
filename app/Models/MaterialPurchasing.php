@@ -6,18 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SalesOrder extends Model
+class MaterialPurchasing extends Model
 {
     use HasFactory, SoftDeletes;
     
-    protected $table = 'sales_order';
+    protected $table = 'material_purchasing';
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'company_id',
-        'customer_id',
-        'purchase_order_id',
         'material_id',
-        'req_delivery_date',
+        'quantity',
+        'vendor',
+        'net_value',
     ];
 }

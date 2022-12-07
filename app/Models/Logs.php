@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Report extends Model
+class Logs extends Model
 {
-    use HasFactory, SoftDeletes;
-    
-    protected $table = 'report';
+    use HasFactory;
+
+    protected $table = 'logs';
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'material_id',
-        'sales_amount',
+        'document_type',
+        'document_id',
+        'action',
     ];
 }

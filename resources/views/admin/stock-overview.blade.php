@@ -44,6 +44,12 @@ Logistik Digital
                     <p>Stock Overview</p>
                 </a>
             </li>
+            <li>
+                <a href="{{url('material-purchasing')}}">
+                    <i class="nc-icon nc-simple-add"></i>
+                    <p>Material Purchasing</p>
+                </a>
+            </li>
 
             <li>
                 <a href="{{url('billing-document')}}">
@@ -73,6 +79,12 @@ Logistik Digital
                 <a href="{{url('report')}}">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Report</p>
+                </a>
+            </li>
+            <li>
+                <a href="{{url('logs')}}">
+                    <i class="nc-icon nc-app"></i>
+                    <p>Log</p>
                 </a>
             </li>
         </ul>
@@ -121,7 +133,7 @@ Logistik Digital
 
     <!-- CONTENT -->
 
-    <div class="content">
+    <!-- <div class="content">
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-user">
@@ -178,7 +190,11 @@ Logistik Digital
                         </form>
                     </div>
                 </div>
-            </div>
+            </div> -->
+            <br>
+            <br>
+            <br>
+            <br>
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -189,7 +205,8 @@ Logistik Digital
                             <table class="table">
                                 <thead class=" text-primary">
                                     <th>
-                                        No
+                                        Warehouse
+                                        Number
                                     </th>
                                     <th>
                                         Material Name
@@ -199,6 +216,9 @@ Logistik Digital
                                     </th>
                                     <th>
                                         Quantity
+                                    </th>
+                                    <th>
+                                        Price
                                     </th>
                                 </thead>
                                 <tbody>
@@ -218,6 +238,9 @@ Logistik Digital
                                         </td>
                                         <td>
                                             {{$key->quantity}}
+                                        </td>
+                                        <td>
+                                        {{"Rp " . number_format($key->price,0,',','.')}}
                                         </td>
                                     </tr>
                                     

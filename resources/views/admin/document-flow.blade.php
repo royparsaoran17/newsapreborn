@@ -21,12 +21,6 @@ Logistik Digital
                 </a>
             </li>
             <li>
-                <a href="{{url('purchase-orderrrrr')}}">
-                    <i class="nc-icon nc-cart-simple"></i>
-                    <p>Purchase Order</p>
-                </a>
-            </li>
-            <li>
                 <a href="{{url('sales-order')}}">
                     <i class="nc-icon nc-single-copy-04"></i>
                     <p>Sales Order</p>
@@ -48,6 +42,12 @@ Logistik Digital
                 <a href="{{url('stock-overview')}}">
                     <i class="nc-icon nc-tile-56"></i>
                     <p>Stock Overview</p>
+                </a>
+            </li>
+            <li>
+                <a href="{{url('material-purchasing')}}">
+                    <i class="nc-icon nc-simple-add"></i>
+                    <p>Material Purchasing</p>
                 </a>
             </li>
 
@@ -79,6 +79,12 @@ Logistik Digital
                 <a href="{{url('report')}}">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Report</p>
+                </a>
+            </li>
+            <li>
+                <a href="{{url('logs')}}">
+                    <i class="nc-icon nc-app"></i>
+                    <p>Log</p>
                 </a>
             </li>
         </ul>

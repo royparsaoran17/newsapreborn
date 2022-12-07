@@ -44,6 +44,12 @@ Logistik Digital
                     <p>Stock Overview</p>
                 </a>
             </li>
+            <li>
+                <a href="{{url('material-purchasing')}}">
+                    <i class="nc-icon nc-simple-add"></i>
+                    <p>Material Purchasing</p>
+                </a>
+            </li>
 
             <li>
                 <a href="{{url('billing-document')}}">
@@ -73,6 +79,12 @@ Logistik Digital
                 <a href="{{url('report')}}">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Report</p>
+                </a>
+            </li>
+            <li>
+                <a href="{{url('logs')}}">
+                    <i class="nc-icon nc-app"></i>
+                    <p>Log</p>
                 </a>
             </li>
         </ul>
@@ -150,6 +162,18 @@ Logistik Digital
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>
+                                            <option value="3">4</option>
+                                            <option value="3">5</option>
+                                            <option value="3">6</option>
+                                            <option value="3">7</option>
+                                            <option value="3">8</option>
+                                            <option value="3">9</option>
+                                            <option value="3">10</option>
+                                            <option value="3">11</option>
+                                            <option value="3">12</option>
+                                            <option value="3">13</option>
+                                            <option value="3">14</option>
+                                            <option value="3">15</option>
                                         </select>
                                     </div>
                                 </div>

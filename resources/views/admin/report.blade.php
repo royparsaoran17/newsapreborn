@@ -44,6 +44,12 @@ Logistik Digital
                     <p>Stock Overview</p>
                 </a>
             </li>
+            <li>
+                <a href="{{url('material-purchasing')}}">
+                    <i class="nc-icon nc-simple-add"></i>
+                    <p>Material Purchasing</p>
+                </a>
+            </li>
 
             <li>
                 <a href="{{url('billing-document')}}">
@@ -73,6 +79,12 @@ Logistik Digital
                 <a href="{{url('report')}}">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Report</p>
+                </a>
+            </li>
+            <li>
+                <a href="{{url('logs')}}">
+                    <i class="nc-icon nc-app"></i>
+                    <p>Log</p>
                 </a>
             </li>
         </ul>
@@ -195,13 +207,13 @@ Logistik Digital
                                             {{$key->description}}
                                         </td>
                                         <td>
-                                            {{$key->price}}
+                                            {{"Rp " . number_format($key->price,0,',','.')}}
                                         </td>
                                         <td>
                                             {{$key->quantity}}
                                         </td>
                                         <td>
-                                            {{$key->total}}
+                                        {{"Rp " . number_format($key->total,0,',','.')}}
                                         </td>
                                     </tr>
                                     @endforeach
@@ -213,7 +225,7 @@ Logistik Digital
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <h5>Sales Amount : Rp {{$sales}}</h5>
+                                    <h5>Sales Amount : {{"Rp " . number_format($sales,0,',','.')}}</h5>
                                 </div>
                             </div>
                         </div>

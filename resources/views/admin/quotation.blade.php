@@ -44,6 +44,12 @@ Logistik Digital
                     <p>Stock Overview</p>
                 </a>
             </li>
+            <li>
+                <a href="{{url('material-purchasing')}}">
+                    <i class="nc-icon nc-simple-add"></i>
+                    <p>Material Purchasing</p>
+                </a>
+            </li>
 
             <li>
                 <a href="{{url('billing-document')}}">
@@ -73,6 +79,12 @@ Logistik Digital
                 <a href="{{url('report')}}">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Report</p>
+                </a>
+            </li>
+            <li>
+                <a href="{{url('logs')}}">
+                    <i class="nc-icon nc-app"></i>
+                    <p>Log</p>
                 </a>
             </li>
         </ul>
@@ -186,7 +198,7 @@ Logistik Digital
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Net Value</label>
-                                        <input type="number" class="form-control" name="net_value">
+                                        <input type="text" class="form-control" name="net_value" id="admin-quotation-net-value">
                                     </div>
                                 </div>
                             </div>
@@ -254,6 +266,9 @@ Logistik Digital
                                     <th>
                                         Net Value
                                     </th>
+                                    <th>
+                                        
+                                    </th>
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $key)
@@ -278,9 +293,19 @@ Logistik Digital
                                             {{$key->valid_to}}
                                         </td>
                                         <td>
-                                            {{$key->net_value}}
+                                            {{"Rp " . number_format($key->net_value,0,',','.')}}
                                         </td>
-                                    </tr>
+
+                                        <td style="text-align: center">
+                                            <div class="update ml-auto mr-auto">
+                                                <form action="{{ URL('quotation/'.$key->id.'/delete') }}" method="POST">
+                                                    {{ csrf_field() }}
+                                                    <button type="submit"
+                                                        class="btn btn-danger btn-round">Delete</button>
+                                                </form>
+                                            </div>
+                                        </td>
+
                                     @endforeach
                                 </tbody>
                             </table>
@@ -298,7 +323,6 @@ Logistik Digital
                     <span class="copyright">
                         © <script>
                             document.write(new Date().getFullYear())
-
                         </script>
                     </span>
                 </div>
@@ -306,5 +330,12 @@ Logistik Digital
         </div>
     </footer>
 </div>
+
+{{-- <script>
+    var valquo = document.getElementById('admin-quotation-net-value');
+    valquo.addEventListener('keyup', function(e){
+        valquo.value = formatRupiah(this.value, 'Rp. ');
+    });
+</script> --}}
 
 @endsection

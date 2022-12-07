@@ -44,8 +44,14 @@ Logistik Digital
                     <p>Stock Overview</p>
                 </a>
             </li>
-
             <li class="active">
+                <a href="{{url('material-purchasing')}}">
+                    <i class="nc-icon nc-simple-add"></i>
+                    <p>Material Purchasing</p>
+                </a>
+            </li>
+
+            <li>
                 <a href="{{url('billing-document')}}">
                     <i class="nc-icon nc-tablet-2"></i>
                     <p>Billing Document</p>
@@ -132,30 +138,29 @@ Logistik Digital
             <div class="col-md-12">
                 <div class="card card-user">
                     <div class="card-header">
-                        <h5 class="card-title">Create Billing Document with Reference Outbound Delivery</h5>
+                        <h5 class="card-title">Purchase Material</h5>
                     </div>
                     <div class="card-body">
                         @if($errors->any())
                         @foreach($errors->all() as $err)
                         <div class="alert alert-danger alert-dismissible fade show">
-                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert"
-                                aria-label="Close">
-                                <i class="nc-icon nc-simple-remove"></i>
+                            <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                              <i class="nc-icon nc-simple-remove"></i>
                             </button>
                             <span>{{ $err }}</span>
-                        </div>
+                          </div>
                         @endforeach
                         @endif
-                        <form action="{{ route('billing_document.action') }}" method="POST">
+                        <form action="{{ route('material_purchasing.action') }}" method="POST">
                             {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Outbound Delivery</label>
-                                        <select class="form-control" aria-label="Default select example" name="outbound_delivery_id" id="admin-outbound-delivery">
+                                        <label>Material</label>
+                                        <select class="form-control" aria-label="Default select example" name="material_id">
                                             <option selected></option>
-                                            @foreach ($ob as $key)
-                                            <option value="{{$key->id}}">OD-0{{$key->id}}</option>
+                                            @foreach ($material as $key)
+                                            <option value="{{$key->id}}">M-0{{$key->id}} {{$key->name}}</option>    
                                             @endforeach
                                         </select>
                                     </div>
@@ -164,70 +169,30 @@ Logistik Digital
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Payer</label>
-                                        <input type="hidden" name="material_id" id="outbound-val-material_id">
-                                        <input type="hidden" name="billed_quantity" id="outbound-val-billed_quantity">
-                                        <input type="text" class="form-control" disabled id="billing_document_customer">
+                                        <label>Vendor</label>
+                                        <input type="text" class="form-control" name="vendor">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Billing Date</label>
-                                        <input type="date" class="form-control" value="<?php echo date('Y-m-d'); ?>" name="billing_date"/>
+                                        <label>Quantity</label>
+                                        <input type="text" class="form-control" name="quantity">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Net Value</label>
-                                        <input type="text" class="form-control" name="net_value" id="admin-billing-net-value">
+                                        <label>Purchase Price</label>
+                                        <input type="text" class="form-control" name="net_value" id='admin-material-purchasing-net-value'>
                                     </div>
-                                </div>
-                            </div>
-                            <br>
-                            <h5>Material Details</h5>
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-12">
-                                <div class="table-responsive">
-                            <table class="table">
-                                <thead class=" text-primary">
-                                    <th>
-                                        Material Name
-                                    </th>
-                                    <th>
-                                        Description
-                                    </th>
-                                    <th>
-                                        Billed Quantity
-                                    </th>
-                                    <th>
-                                        Net Value
-                                    </th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td id="outbound-delivery-material-name">
-                                            
-                                        </td>
-                                        <td id="outbound-delivery-material-description">
-                                        </td>
-                                        <td id="outbound-delivery-quantity">
-                                        </td>
-                                        <td id="outbound-delivery-amount">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="update ml-auto mr-auto">
-                                    <button type="submit" class="btn btn-primary btn-round">Create Billing Document</button>
+                                    <button type="submit" class="btn btn-primary btn-round">Purchase</button>
                                 </div>
                             </div>
                         </form>
@@ -237,51 +202,39 @@ Logistik Digital
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title"> View Billing Document</h4>
+                        <h4 class="card-title"> View Material Purchasing</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table">
                                 <thead class=" text-primary">
                                     <th>
-                                        Billing / Invoice Number
+                                        Material ID
                                     </th>
                                     <th>
-                                        Customer / Payer
+                                        Vendor
                                     </th>
                                     <th>
-                                        Billing Date
+                                        Quantity
                                     </th>
                                     <th>
                                         Net Value
-                                    </th>
-                                    <th>
-                                        
                                     </th>
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $key)
                                     <tr>
                                         <td>
-                                            B-0{{$key->id}}
+                                            M-0{{$key->material_id}}
                                         </td>
                                         <td>
-                                            C-0{{$key->customer_id}} - {{$key->user_name}}
+                                            {{$key->vendor}}
                                         </td>
                                         <td>
-                                            {{$key->billing_date}}
+                                            {{$key->quantity}}
                                         </td>
                                         <td>
-                                        {{"Rp " . number_format($key->net_value,0,',','.')}}
-                                        </td>
-                                        <td style="text-align: center">
-                                            <div class="update ml-auto mr-auto">
-                                                <form action="{{ URL('billing-document/'.$key->id.'/delete') }}" method="POST">
-                                                    {{ csrf_field() }}
-                                                    <button type="submit"
-                                                        class="btn btn-danger btn-round">Delete</button>
-                                                </form>
-                                            </div>
+                                            {{"Rp " . number_format($key->net_value,0,',','.')}}
                                         </td>
                                     </tr>
                                     @endforeach
@@ -310,12 +263,12 @@ Logistik Digital
         </div>
     </footer>
 </div>
-{{-- 
+
 <script>
-    var valquo = document.getElementById('admin-billing-net-value');
+    var valquo = document.getElementById('admin-material-purchasing-net-value');
     valquo.addEventListener('keyup', function(e){
         valquo.value = formatRupiah(this.value, 'Rp. ');
     });
-</script> --}}
+</script>
 
 @endsection

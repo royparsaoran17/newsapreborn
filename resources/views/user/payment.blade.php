@@ -171,9 +171,6 @@ Logistik Digital
                                                 <th>
                                                     Amount
                                                 </th>
-                                                <th>
-                                                    Currency
-                                                </th>
                                             </thead>
                                             <tbody>
                                                 <tr>
@@ -185,17 +182,12 @@ Logistik Digital
                                                     </td>
                                                     <td id="payment-amount">
                                                     </td>
-                                                    <td id="payment-idr">
-                                                    </td>
                                                 </tr>
                                                 <tr style="background-color:lightgrey">
                                                     <th colspan="3" style="text-align:center">
                                                         Total Amount
                                                     </th>
                                                     <td id="payment-amount-2">
-                                                    </td>
-                                                    <td>
-                                                        IDR
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -265,7 +257,12 @@ Logistik Digital
     </footer>
 </div>
 
-<script type="text/javascript">
- 
-</script>
+{{-- 
+<script>
+    var valquo = document.getElementById('user-payment');
+    valquo.addEventListener('keyup', function(e){
+        valquo.value = formatRupiah(this.value, 'Rp. ');
+    });
+</script> --}}
+
 @endsection

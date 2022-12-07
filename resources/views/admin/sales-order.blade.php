@@ -44,6 +44,12 @@ Logistik Digital
                     <p>Stock Overview</p>
                 </a>
             </li>
+            <li>
+                <a href="{{url('material-purchasing')}}">
+                    <i class="nc-icon nc-simple-add"></i>
+                    <p>Material Purchasing</p>
+                </a>
+            </li>
 
             <li>
                 <a href="{{url('billing-document')}}">
@@ -73,6 +79,12 @@ Logistik Digital
                 <a href="{{url('report')}}">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Report</p>
+                </a>
+            </li>
+            <li>
+                <a href="{{url('logs')}}">
+                    <i class="nc-icon nc-app"></i>
+                    <p>Log</p>
                 </a>
             </li>
         </ul>
@@ -260,6 +272,9 @@ Logistik Digital
                                     <th>
                                        Order Quantity
                                     </th>
+                                    <th>
+                                       
+                                    </th>
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $key)
@@ -281,6 +296,15 @@ Logistik Digital
                                         </td>
                                         <td>
                                             {{$key->quantity}}
+                                        </td>
+                                        <td style="text-align: center">
+                                            <div class="update ml-auto mr-auto">
+                                                <form action="{{ URL('sales-order/'.$key->id.'/delete') }}" method="POST">
+                                                    {{ csrf_field() }}
+                                                    <button type="submit"
+                                                        class="btn btn-danger btn-round">Delete</button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                     @endforeach

@@ -21,8 +21,6 @@
 
 <body class="">
     <div class="wrapper ">
-
-
         @yield('users.content')
     </div>
     <!--   Core JS Files   -->
@@ -40,6 +38,29 @@
     <script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script>
     <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
     <!-- <script src="../assets/demo/demo.js"></script> -->
+    <script type="text/javascript">
+  		
+        /* Fungsi formatRupiah */
+        function formatRupiah(angka, prefix){
+            var number_string = angka.toString().replace(/[^,\d]/g, '').toString(),
+            split   		= number_string.split(','),
+            sisa     		= split[0].length % 3,
+            rupiah     		= split[0].substr(0, sisa),
+            ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+    
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if(ribuan){
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+    
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+
+    </script>
+    
+      
     <script>
         $('#sidebar-user a').click(function () {
             $('#sidebar-user a').removeClass('active');
@@ -82,7 +103,7 @@
                 $('#quotation-distribution').val(data.distribution_channel);
                 $('#quotation-valid-from').val(data.valid_from);
                 $('#quotation-valid-to').val(data.valid_to);
-                $('#quotation-net-value').val(data.net_value);
+                $('#quotation-net-value').val(formatRupiah(data.net_value, 'Rp. '));
                 $('#quotation-material').val("M-0" + data.material_id + " " + data.material_name);
                 $('#quotation-quantity').val(data.order_quantity);
                 $('#quotation-material-description').val(data.description);
@@ -94,9 +115,8 @@
                 $('#payment-material-name').html("(M-0" + data.material_id + ") "+ data.material_name);
                 $('#payment-material-description').html(data.description);
                 $('#payment-quantity').html(data.billed_quantity);
-                $('#payment-amount').html(data.net_value);
-                $('#payment-amount-2').html(data.net_value);
-                $('#payment-idr').html("IDR");
+                $('#payment-amount').html(formatRupiah(data.net_value, 'Rp. '));
+                $('#payment-amount-2').html(formatRupiah(data.net_value, 'Rp. '));
                 $('#user-payment-company-id').val(data.company_id);
 
                 var location = $('#user-payment-company');

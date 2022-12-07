@@ -11,6 +11,7 @@ use App\Http\Requests;
 use App\Models\Inquiry;
 use App\Models\PurchaseOrder;
 use App\Models\UserPayment;
+use App\Models\Logs;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,15 +22,18 @@ class UserController extends Controller
     public function inquiry()
     {
         $company = DB::table('company')
+            ->where('deleted_at',null)
             ->get();
         
         $material = DB::table('material')
+            ->where('deleted_at',null)
             ->get();
         
         $data = DB::table('inquiry')
             ->select('material.name as material_name','company.name as company_name',"inquiry.*","company.distribution_channel","material.description as desc")
             ->join('company', 'inquiry.company_id', '=', 'company.id')
             ->join('material', 'inquiry.material_id', '=', 'material.id')
+            ->where('inquiry.deleted_at',null)
             ->get();
 
         return view('user.inquiry')
@@ -55,15 +59,18 @@ class UserController extends Controller
         $inq->save();
 
         $company = DB::table('company')
+            ->where('deleted_at',null)
             ->get();
         
         $material = DB::table('material')
+            ->where('deleted_at',null)
             ->get();
         
         $data = DB::table('inquiry')
             ->select('material.name as material_name','company.name as company_name',"inquiry.*","company.distribution_channel","material.description as desc")
             ->join('company', 'inquiry.company_id', '=', 'company.id')
             ->join('material', 'inquiry.material_id', '=', 'material.id')
+            ->where('inquiry.deleted_at',null)
             ->get();
 
         return view('user.inquiry')
@@ -76,6 +83,7 @@ class UserController extends Controller
     {
                 
         $data = DB::table('quotation')
+            ->where('deleted_at',null)
             ->get();
 
         return view('user.quotation')
@@ -89,15 +97,19 @@ class UserController extends Controller
             ->select('material.name as material_name','company.name as company_name',"purchase_order.*","company.distribution_channel","material.description as desc")
             ->join('company', 'purchase_order.company_id', '=', 'company.id')
             ->join('material', 'purchase_order.material_id', '=', 'material.id')
+            ->where('purchase_order.deleted_at',null)
             ->get();
         
         $company = DB::table('company')
+            ->where('deleted_at',null)
             ->get();
         
         $inquiry = DB::table('inquiry')
+            ->where('deleted_at',null)
             ->get();
         
         $material = DB::table('material')
+            ->where('deleted_at',null)
             ->get();
 
         return view('user.purchase-order')
@@ -129,19 +141,32 @@ class UserController extends Controller
 
         $po->save();
 
+        
+        $log = new Logs([
+            'document_type' => "purchase_order",
+            'document_id' => $po->id,
+            'action' => "create",
+        ]);
+        $log->save();
+
+
         $data = DB::table('purchase_order')
             ->select('material.name as material_name','company.name as company_name',"purchase_order.*","company.distribution_channel","material.description as desc")
             ->join('company', 'purchase_order.company_id', '=', 'company.id')
             ->join('material', 'purchase_order.material_id', '=', 'material.id')
+            ->where('purchase_order.deleted_at',null)
             ->get();
         
         $company = DB::table('company')
+            ->where('deleted_at',null)
             ->get();
                 
          $inquiry = DB::table('inquiry')
+            ->where('deleted_at',null)
             ->get();
             
         $material = DB::table('material')
+            ->where('deleted_at',null)
             ->get();
             
         return view('user.purchase-order')
@@ -156,9 +181,11 @@ class UserController extends Controller
     public function payment()
     {
         $company = DB::table('company')
+            ->where('deleted_at',null)
             ->get();
 
         $billing = DB::table('billing_document')
+            ->where('deleted_at',null)
             ->get();
 
         $flagPayment = false;
@@ -189,10 +216,19 @@ class UserController extends Controller
 
         $po->save();
 
+        $log = new Logs([
+            'document_type' => "user_payment",
+            'document_id' => $po->id,
+            'action' => "create",
+        ]);
+        $log->save();
+
         $company = DB::table('company')
+            ->where('deleted_at',null)
             ->get();
 
         $billing = DB::table('billing_document')
+            ->where('deleted_at',null)
             ->get();
 
         $flagPayment = true;

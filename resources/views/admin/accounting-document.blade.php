@@ -44,6 +44,12 @@ Logistik Digital
                     <p>Stock Overview</p>
                 </a>
             </li>
+            <li>
+                <a href="{{url('material-purchasing')}}">
+                    <i class="nc-icon nc-simple-add"></i>
+                    <p>Material Purchasing</p>
+                </a>
+            </li>
 
             <li>
                 <a href="{{url('billing-document')}}">
@@ -73,6 +79,18 @@ Logistik Digital
                 <a href="{{url('report')}}">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Report</p>
+                </a>
+            </li>
+            <li>
+                <a href="{{url('logs')}}">
+                    <i class="nc-icon nc-app"></i>
+                    <p>Log</p>
+                </a>
+            </li>
+            <li>
+                <a href="{{url('logs')}}">
+                    <i class="nc-icon nc-app"></i>
+                    <p>Log</p>
                 </a>
             </li>
         </ul>
@@ -190,7 +208,7 @@ Logistik Digital
                                                     Amount
                                                 </th>
                                                 <th>
-                                                    Currency
+                                                    
                                                 </th>
                                             </thead>
                                             <tbody>
@@ -205,10 +223,7 @@ Logistik Digital
                                                         {{$billing->billed_quantity}}
                                                     </td>
                                                     <td>
-                                                        {{$billing->net_value}}
-                                                    </td>
-                                                    <td>
-                                                        IDR
+                                                    {{"Rp " . number_format($billing->net_value,0,',','.')}}
                                                     </td>
                                                 </tr>          
                                                 <tr style="background-color:lightgrey">
@@ -216,10 +231,7 @@ Logistik Digital
                                                         Total Amount
                                                     </th>
                                                     <td>
-                                                        {{$billing->net_value}}
-                                                    </td>
-                                                    <td>
-                                                        IDR
+                                                    {{"Rp " . number_format($billing->net_value,0,',','.')}}
                                                     </td>
                                                 </tr>
                                             </tbody>

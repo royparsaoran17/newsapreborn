@@ -18,6 +18,20 @@
   <link href="../assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="../assets/demo/demo.css" rel="stylesheet" />
+  <style>
+    input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+    </style>
 </head>
 
 <body class="">
@@ -38,11 +52,41 @@
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project! -->
   {{-- <script src="../assets/demo/demo.js"></script> --}}
+  <script type="text/javascript">
+  		
+    // var valbil = document.getElementById('admin-billing-net-value');
+		// valbil.addEventListener('keyup', function(e){
+		// 	rupiah.value = formatRupiah(this.value, 'Rp. ');
+		// });
+
+		/* Fungsi formatRupiah */
+		function formatRupiah(angka, prefix){
+			var number_string = angka.toString().replace(/[^,\d]/g, '').toString(),
+			split   		= number_string.split(','),
+			sisa     		= split[0].length % 3,
+			rupiah     		= split[0].substr(0, sisa),
+			ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+ 
+			// tambahkan titik jika yang di input sudah menjadi angka ribuan
+			if(ribuan){
+				separator = sisa ? '.' : '';
+				rupiah += separator + ribuan.join('.');
+			}
+ 
+			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+		}
+
+   </script>
+
   <script>
+
     $('#admin-inquiry').change(function () {
         $.getJSON("/admin/dropdown/inquiry/" + $(this).val(), function (data) {
           $('#quotation-material-name').val(data.material_name);
           $('#quotation-order-quantity').val(data.order_quantity);
+          $('#quotation-order-quantity').val(data.order_quantity);
+          $('#admin-quotation-net-value').val(formatRupiah(data.order_quantity * data.material_price , 'Rp. '));
           $('#quotation-material-description').val(data.description);
         });
     });
@@ -66,7 +110,6 @@
 
     $('#admin-sales-order').change(function () {
         $.getJSON("/admin/dropdown/sales-order/" + $(this).val(), function (data) {
-          console.log(data.customer_name,"======");
           $('#outbound-delivery-customer').val("C-0"+data.customer_id+" "+data.customer_name);
           $('#outbound-delivery-req-delivery-date').val(data.req_delivery_date);
           $('#outbound-delivery-material').val("M-0"+data.material_id+" "+data.material_name);
@@ -82,8 +125,9 @@
           $('#outbound-delivery-material-name').html("(M-0" + data.material_id + ") "+ data.material_name);
           $('#outbound-delivery-material-description').html(data.description);
           $('#outbound-delivery-quantity').html(data.quantity);
-          $('#outbound-delivery-amount').html(data.net_value);
+          $('#outbound-delivery-amount').html(formatRupiah(data.net_value , 'Rp. '));
           $('#outbound-val-material_id').val(data.material_id);
+          $('#admin-billing-net-value').val(formatRupiah(data.net_value , 'Rp. '));
           $('#outbound-val-billed_quantity').val(data.quantity);
         });
     });
