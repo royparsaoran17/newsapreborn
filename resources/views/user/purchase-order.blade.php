@@ -217,7 +217,7 @@ Logistik Digital
                                             {{$key->material_name}}
                                         </td>
                                         <td>
-                                            {{$key->quantity}}
+                                            {{number_format($key->quantity,0,',','.')}}
                                         </td>
                                         <td>
                                             {{$key->delivery_date}}

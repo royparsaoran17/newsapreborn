@@ -178,14 +178,14 @@ Logistik Digital
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Quantity</label>
-                                        <input type="text" class="form-control" name="quantity">
+                                        <input type="text" class="form-control" name="quantity" id='admin-material-purchasing-quantity'>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Purchase Price</label>
+                                        <label>Purchase Price (pcs)</label>
                                         <input type="text" class="form-control" name="net_value" id='admin-material-purchasing-net-value'>
                                     </div>
                                 </div>
@@ -231,7 +231,7 @@ Logistik Digital
                                             {{$key->vendor}}
                                         </td>
                                         <td>
-                                            {{$key->quantity}}
+                                            {{number_format($key->quantity,0,',','.')}}
                                         </td>
                                         <td>
                                             {{"Rp " . number_format($key->net_value,0,',','.')}}
@@ -268,6 +268,11 @@ Logistik Digital
     var valquo = document.getElementById('admin-material-purchasing-net-value');
     valquo.addEventListener('keyup', function(e){
         valquo.value = formatRupiah(this.value, 'Rp. ');
+    });
+
+    var valqua = document.getElementById('admin-material-purchasing-quantity');
+    valqua.addEventListener('keyup', function(e){
+        valqua.value = formatRupiah(this.value, '');
     });
 </script>
 

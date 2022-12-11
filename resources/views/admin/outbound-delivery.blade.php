@@ -310,7 +310,7 @@
                                             M-0{{$key->material_id}} - {{$key->material_name}}
                                         </td>
                                         <td>
-                                            {{$key->quantity}}
+                                            {{number_format($key->quantity,0,',','.')}}
                                         </td>
                                         <td>
                                             {{$key->warehouse_number}}

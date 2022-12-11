@@ -53,7 +53,7 @@ class UserController extends Controller
         $inq = new Inquiry([
             'material_id' => $request->material_id,
             'company_id' => $request->company_id,
-            'order_quantity' => $request->order_quantity,
+            'order_quantity' => str_replace(".","",$request->order_quantity),
         ]);
 
         $inq->save();

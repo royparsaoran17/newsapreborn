@@ -147,7 +147,7 @@ Logistik Digital
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Order Quantity</label>
-                                        <input type="number" class="form-control" name="order_quantity" required>
+                                        <input type="text" class="form-control" name="order_quantity" id="user-inquiry-order-quantity"required>
                                     </div>
                                 </div>
                             </div>
@@ -258,5 +258,12 @@ Logistik Digital
         </div>
     </footer>
 </div>
+
+<script>
+    var valqua = document.getElementById('user-inquiry-order-quantity');
+    valqua.addEventListener('keyup', function(e){
+        valqua.value = formatRupiah(this.value, '');
+    });
+</script>
 
 @endsection

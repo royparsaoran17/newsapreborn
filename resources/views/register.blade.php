@@ -154,7 +154,33 @@
             {{ csrf_field() }}
             <h1>Register</h1>
             <div class="content">
-                <div class="input-field">
+                
+                <div class="form-group" style="text-align:left">
+                    <label>Name</label>
+                    <input type="text" class="form-control" autocomplete="nope" name="name">
+                </div>
+                <br>
+                <div class="form-group" style="text-align:left" >
+                    <label>Phone Number</label>
+                    <input type="number" class="form-control" autocomplete="nope" name="phone_number">
+                </div>
+                <br>
+                <div class="form-group" style="text-align:left">
+                    <label>Address</label>
+                    <input type="text" class="form-control" autocomplete="nope" name="address">
+                </div>
+                <br>
+                <div class="form-group" style="text-align:left" >
+                    <label>Email</label>
+                    <input type="email" class="form-control" autocomplete="nope" name="email">
+                </div>
+                <br>
+                <div class="form-group" style="text-align:left">
+                    <label>Password</label>
+                    <input type="password" class="form-control" autocomplete="nope" name="password">
+                </div>
+
+                {{-- <div class="input-field">
                     <input type="text" placeholder="Name" autocomplete="nope" name="name" required>
                 </div>
                 <div class="input-field">
@@ -168,7 +194,7 @@
                 </div>
                 <div class="input-field">
                     <input type="password" placeholder="Password" autocomplete="new-password" name="password" required>
-                </div>
+                </div> --}}
             </div>
             <div class="action">
                 <button class="btn btn-primary">Register</button>

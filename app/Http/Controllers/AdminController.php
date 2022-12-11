@@ -681,8 +681,8 @@ class AdminController extends Controller
         $quo = new MaterialPurchasing([
             'material_id' => $request->material_id,
             'vendor' => $request->vendor,
-            'quantity' => $request->quantity,
-            'net_value' =>  str_replace(".","",str_replace("Rp","",$request->net_value)),
+            'quantity' => str_replace(".","",$request->quantity),
+            'net_value' =>  str_replace(".","",str_replace("Rp","",$request->net_value)) *  str_replace(".","",$request->quantity),
         ]);
         $quo->save();
 
@@ -693,13 +693,13 @@ class AdminController extends Controller
                 ->first();
     
             Material::where('id', $request->material_id)
-                ->update(['quantity' =>  ($m->quantity + $request->quantity)]);
+                ->update(['quantity' =>  ($m->quantity +  str_replace(".","",$request->quantity))]);
         }
 
         $log = new Logs([
             'document_type' => "material_purchasing",
             'document_id' => $quo->id,
-            'action' => "buy ".$request->quantity." with price ".$request->net_value,
+            'action' => "buy ".$request->quantity." with price per pcs ".$request->net_value,
         ]);
         $log->save();
 

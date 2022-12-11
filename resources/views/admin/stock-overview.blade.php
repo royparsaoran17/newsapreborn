@@ -237,7 +237,7 @@ Logistik Digital
                                             {{$key->description}}
                                         </td>
                                         <td>
-                                            {{$key->quantity}}
+                                            {{number_format($key->quantity,0,',','.')}}
                                         </td>
                                         <td>
                                         {{"Rp " . number_format($key->price,0,',','.')}}

@@ -20,18 +20,18 @@
   <link href="../assets/demo/demo.css" rel="stylesheet" />
   <style>
     input[type="date"]::-webkit-calendar-picker-indicator {
-    background: transparent;
-    bottom: 0;
-    color: transparent;
-    cursor: pointer;
-    height: auto;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: auto;
-}
-    </style>
+        background: transparent;
+        bottom: 0;
+        color: transparent;
+        cursor: pointer;
+        height: auto;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: auto;
+    }
+  </style>
 </head>
 
 <body class="">
@@ -74,7 +74,7 @@
 			}
  
 			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+			return prefix == undefined ? rupiah : (rupiah ? prefix + rupiah : '');
 		}
 
    </script>
